@@ -68,7 +68,7 @@
   <div class="row g-0">
 
     <div class="col-md-6 login-left d-none d-md-flex">
-      <img src="${pageContext.request.contextPath}/images/login.png" alt="Login">
+      <img src="${pageContext.request.contextPath}/images/login_user.png" alt="Register">
     </div>
 
     <div class="col-md-6 login-right">
