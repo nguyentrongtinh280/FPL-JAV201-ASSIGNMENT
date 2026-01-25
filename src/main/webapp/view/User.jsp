@@ -137,7 +137,49 @@
     </div>
   </div>
 
-  
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h5 class="page-title">Danh sách người dùng</h5>
+
+      <table class="table table-bordered table-hover text-center align-middle">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Họ và tên</th>
+          <th>Tên đăng nhập</th>
+          <th>Email</th>
+          <th>Vai trò</th>
+          <th>Hành động</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <c:forEach items="${users}" var="u">
+          <tr>
+            <td>${u.id}</td>
+            <td>${u.fullname}</td>
+            <td>${u.username}</td>
+            <td>${u.email}</td>
+            <td>
+              <span class="badge ${u.admin ? 'bg-danger' : 'bg-primary'}">
+                  ${u.admin ? 'Admin' : 'User'}
+              </span>
+            </td>
+
+            <td>
+              <a href="${url}/edit?id=${u.id}" class="btn btn-sm btn-info">
+                <i class="fa fa-pen"></i>
+                Sửa
+              </a>
+            </td>
+
+          </tr>
+        </c:forEach>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </main>
 
 <jsp:include page="FooterAdmin.jsp"/>
