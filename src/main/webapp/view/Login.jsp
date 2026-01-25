@@ -67,10 +67,11 @@
   <div class="row g-0">
 
     <div class="col-md-6 login-left d-none d-md-flex">
+      <img src="${pageContext.request.contextPath}/images/login_user.png" alt="Register">
     </div>
 
     <div class="col-md-6 login-right">
-      <h3 class="text-center fw-bold mb-4">Đăng nhập</h3>
+      <h3 class="text-center fw-bold mb-4 text-primary">Đăng nhập</h3>
 
       <form action="login" method="post" id="loginForm" novalidate>
         <div class="mb-3 position-relative">
