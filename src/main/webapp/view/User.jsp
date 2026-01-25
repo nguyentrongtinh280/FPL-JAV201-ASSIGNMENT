@@ -1,0 +1,171 @@
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý người dùng</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    .page-title {
+      color: #2a5298;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .card {
+      border-radius: 12px;
+    }
+    .form-control {
+      border-radius: 8px;
+    }
+    .btn {
+      border-radius: 8px;
+      padding: 8px 18px;
+    }
+    .table thead {
+      background-color: #2a5298;
+      color: #fff;
+    }
+    .table tbody tr:hover {
+      background-color: #eef3ff;
+    }
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100 bg-white">
+
+<jsp:include page="MenuAdmin.jsp"/>
+
+<main class="container my-4 flex-fill">
+  <c:url var="url" value="/user"/>
+  
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h4 class="page-title text-center">Thông tin người dùng</h4>
+
+      <form action="${url}" method="post" id="userForm" novalidate class="was-validated">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" name="fullname" class="form-control" required>
+            <div class="invalid-feedback">Vui lòng nhập họ và tên!</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Tên đăng nhập</label>
+            <input type="text" name="username" class="form-control" required>
+            <div class="invalid-feedback">Vui lòng nhập tên đăng nhập!</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+            <div class="invalid-feedback">Vui lòng nhập email!</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" name="phone" class="form-control" required>
+            <div class="invalid-feedback">Vui lòng nhập số điện thoại!</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Mật khẩu</label>
+            <input type="password" name="password" class="form-control" required>
+            <div class="invalid-feedback">Vui lòng nhập mật khẩu</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Xác nhận mật khẩu</label>
+            <input type="password" name="confirmPassword" class="form-control" required>
+            <div class="invalid-feedback">Vui lòng xác nhận mật khẩu!</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Địa chỉ</label>
+            <input type="text" name="address" class="form-control" required>
+            <div class="invalid-feedback">Vui lòng nhập địa chỉ</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label d-block">Vai trò</label>
+            <div class="form-check form-check-inline">
+              <input type="radio" class="form-check-input"
+                     name="role" value="false"
+                     <c:if test="${user != null and !user.admin}">checked</c:if>>
+              <label class="form-check-label">Khách hàng</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input type="radio" class="form-check-input"
+                     name="role" value="true"
+                     <c:if test="${user != null and user.admin}">checked</c:if>>
+              <label class="form-check-label">Quản trị viên</label>
+            </div>
+
+          </div>
+
+          <div class="text-center mt-4">
+            <button type="submit" formaction="${url}/create" class="btn btn-primary me-2">
+              <i class="fa fa-plus"></i> Thêm
+            </button>
+
+            <button type="submit" formaction="${url}/update" class="btn btn-warning me-2">
+              <i class="fa fa-pen"></i> Sửa
+            </button>
+
+            <button type="submit" formaction="${url}/delete" class="btn btn-danger me-2">
+              <i class="fa fa-trash"></i> Xóa
+            </button>
+
+            <button type="submit" formaction="${url}/reset" class="btn btn-success me-2">
+              <i class="fa fa-rotate"></i> Mới
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="d-flex mb-2">
+        <input type="text" class="form-control w25 me-2">
+        <button class="btn btn-primary">Tìm</button>
+      </div>
+    </div>
+  </div>
+
+  
+</main>
+
+<jsp:include page="FooterAdmin.jsp"/>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const form = document.getElementById("userForm");
+  const roleRadios = document.querySelectorAll(".role-radio");
+  const actionButtons = document.querySelectorAll("button[formaction]");
+  actionButtons.forEach(btn => {
+    btn.addEventListener("click", function (event) {
+      const action = btn.getAttribute("formaction");
+      // Chỉ validate khi Create hoặc Update
+      const needValidate = action.includes("create") || action.includes("update");
+      // Bật / tắt required cho role
+      roleRadios.forEach(radio => {
+        radio.required = needValidate;
+      });
+      if (needValidate) {
+        form.classList.add("was-validated");
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
