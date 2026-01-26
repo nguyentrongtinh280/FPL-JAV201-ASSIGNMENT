@@ -33,7 +33,7 @@
     }
   </style>
 </head>
-<body class="d-flex flex-column min-vh-100 bg-white">
+<body class="d-flex flex-column min-vh-100 bg-white pt-5">
 
 <jsp:include page="MenuAdmin.jsp"/>
 
