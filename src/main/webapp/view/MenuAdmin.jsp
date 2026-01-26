@@ -32,7 +32,7 @@
   }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Logo</a>
 
@@ -40,23 +40,23 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/home">Trang chủ</a>
+          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/home">Trang chủ</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/category">Quản lý danh mục</a>
+          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/category">Quản lý danh mục</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/product">Quản lý sản phẩm</a>
+          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/product">Quản lý sản phẩm</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/user">Quản lý người dùng</a>
+          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/user">Quản lý người dùng</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/statistical">Thống kê</a>
+          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/statistical">Thống kê</a>
         </li>
       </ul>
 
