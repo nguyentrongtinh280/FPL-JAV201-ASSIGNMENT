@@ -12,7 +12,7 @@
 <jsp:include page="MenuAdmin.jsp"/>
 
 <main class="container my-4 flex-fill">
-  <h1 class="text-center text-white">Xin chào</h1>
+  <h1 class="text-center text-primary">Xin chào, trang quản trị</h1>
 </main>
 
 <jsp:include page="FooterAdmin.jsp"/>
