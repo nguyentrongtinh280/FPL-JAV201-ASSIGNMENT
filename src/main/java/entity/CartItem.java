@@ -11,12 +11,12 @@ public class CartItem {
 
     @ManyToOne
     @MapsId("cartId")
-    @JoinColumn(name = "CartId")
+    @JoinColumn(name = "CartId", nullable = false)
     private Cart cart;
 
     @ManyToOne
     @MapsId("productDetailId")
-    @JoinColumn(name = "ProductDetailId")
+    @JoinColumn(name = "ProductDetailId", nullable = false)
     private ProductDetail productDetail;
 
     @Column(name = "Quantity", nullable = false)
