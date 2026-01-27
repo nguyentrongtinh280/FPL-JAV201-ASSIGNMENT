@@ -149,4 +149,20 @@ public class User {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
+                ", fullname='" + fullname + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", createDate=" + createDate +
+                '}';
+    }
+
 }

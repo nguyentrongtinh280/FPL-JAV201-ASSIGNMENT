@@ -11,12 +11,12 @@ public class OrderDetail {
 
     @ManyToOne
     @MapsId("orderId")
-    @JoinColumn(name = "OrderId")
+    @JoinColumn(name = "OrderId", nullable = false)
     private Order order;
 
     @ManyToOne
     @MapsId("productDetailId")
-    @JoinColumn(name = "ProductDetailId")
+    @JoinColumn(name = "ProductDetailId", nullable = false)
     private ProductDetail productDetail;
 
     @Column(name = "Quantity", nullable = false)
