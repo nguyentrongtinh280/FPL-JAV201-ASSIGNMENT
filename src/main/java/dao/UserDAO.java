@@ -15,5 +15,5 @@ public interface UserDAO {
 
     User login(String usernameOrEmail, String password);
 
-    User findUserById(String UsernameOrPhone);
+    User findUserByUsernameOrPhone(String UsernameOrPhone);
 }
