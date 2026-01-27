@@ -16,24 +16,11 @@
     }
 
     .login-card {
-      max-width: 900px;
-      width: 100%;
+      max-width: 800px;
+      width: 500px;
       border-radius: 15px;
       overflow: hidden;
-    }
-
-    .login-left {
-      background-color: #f8f9fa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .login-left img {
-      width: 70%;
-      max-width: 320px;
-      height: auto;
-      object-fit: contain;
+      height: 390px;
     }
 
     .login-right {
@@ -66,11 +53,7 @@
 <div class="card login-card shadow-lg">
   <div class="row g-0">
 
-    <div class="col-md-6 login-left d-none d-md-flex">
-      <img src="${pageContext.request.contextPath}/images/login_user.png" alt="Register">
-    </div>
-
-    <div class="col-md-6 login-right">
+    <div class="col-md-12 login-right">
       <h3 class="text-center fw-bold mb-4 text-primary">Đăng nhập</h3>
 
       <form action="login" method="post" id="loginForm" novalidate>
