@@ -91,7 +91,7 @@
           </button>
         </div>
         <div class="text-center">
-          <span>Chưa có tài khoản?</span> <a href="#" class="fw-bold text-decoration-none"> Đăng ký </a>
+          <span>Chưa có tài khoản?</span> <a href="Register.jsp" class="fw-bold text-decoration-none"> Đăng ký </a>
         </div>
       </form>
     </div>
