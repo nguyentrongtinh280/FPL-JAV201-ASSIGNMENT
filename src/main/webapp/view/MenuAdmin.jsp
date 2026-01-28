@@ -30,11 +30,26 @@
   .table tbody tr:hover {
     background-color: #eef3ff;
   }
+
+  .logo-img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+  }
+
+  .brand-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+  }
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Logo</a>
+    <div class="col-md-3 d-flex align-items-center justify-content-md-start justify-content-center">
+      <img src="${pageContext.request.contextPath}/images/TTSHop.png" class="logo-img">
+      <span class="brand-name ms-2">TokTok Shop</span>
+    </div>
 
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
