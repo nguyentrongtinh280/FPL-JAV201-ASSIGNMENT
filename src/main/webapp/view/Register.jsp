@@ -9,7 +9,7 @@
   <style>
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #6f86d6, #9f5bd1);
+      background: #c3c3c3;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -50,6 +50,7 @@
   </style>
 </head>
 <body>
+
 <div class="card register-card shadow-lg">
   <div class="row g-0">
     <div class="col-md-12 login-right">
