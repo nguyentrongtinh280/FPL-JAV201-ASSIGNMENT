@@ -9,7 +9,7 @@
   <style>
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #6f86d6, #9f5bd1);
+      background: #c3c3c3;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -82,7 +82,7 @@
               Ghi nhớ đăng nhập
             </label>
           </div>
-          <a href="#">Quên mật khẩu?</a>
+          <a href="OTP.jsp">Quên mật khẩu?</a>
         </div>
 
         <div class="d-grid mb-3">
