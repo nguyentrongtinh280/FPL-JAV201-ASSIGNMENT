@@ -21,4 +21,6 @@ public interface UserDAO {
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
 
+    User findUserByEmailOrUsername(String emailOrUsername);
+
 }

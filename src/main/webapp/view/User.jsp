@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -192,14 +192,12 @@
   <form action="${url}/search" method="get" class="d-flex mb-2">
     <input type="text"
            name="keyword"
-           value="${param.keyword}"
            class="form-control w-25 me-2"
-           placeholder="Username hoặc SĐT">
+           placeholder="Nhập tên đăng nhập hoặc SĐT">
     <button class="btn btn-primary">
-      <i class="fa-solid fa-magnifying-glass"></i> Tìm
+      <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
     </button>
   </form>
-
 
   <div class="card shadow-sm mb-4">
     <div class="card-body">

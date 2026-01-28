@@ -101,7 +101,6 @@ public class UserDAOImpl implements UserDAO{
         }
     }
 
-
     @Override
     public User findUserById(String userId) {
         EntityManager em = XJPA.getEntityManager();
@@ -157,4 +156,17 @@ public class UserDAOImpl implements UserDAO{
         }
     }
 
+    @Override
+    public User findUserByEmailOrUsername(String emailOrUsername) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE (u.email = :emailUsername OR u.username = :emailUsername)";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("emailUsername", emailOrUsername);
+            List<User> list = query.getResultList();
+            return list.isEmpty() ? null : list.get(0);
+        } finally {
+            em.close();
+        }
+    }
 }
