@@ -39,7 +39,7 @@
 
 <main class="container my-4 flex-fill">
   <c:url var="url" value="/admin/user"/>
-  
+  <br>
   <div class="card shadow-sm mb-4">
     <div class="card-body">
       <h4 class="page-title text-center">Thông tin người dùng</h4>
