@@ -1,92 +1,148 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Menu</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <style>
+        .header-custom {
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            padding: 10px 20px;
+        }
 
-<style>
-    .navbar {
-        background: linear-gradient(90deg, #1e3c72, #2a5298);
-    }
-    .navbar-brand {
-        font-weight: bold;
-        color: #fff !important;
-    }
-    .page-title {
-        color: #2a5298;
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
-    .card {
-        border-radius: 12px;
-    }
-    .form-control {
-        border-radius: 8px;
-    }
-    .btn {
-        border-radius: 8px;
-        padding: 8px 18px;
-    }
-    .table thead {
-        background-color: #2a5298;
-        color: #fff;
-    }
-    .table tbody tr:hover {
-        background-color: #eef3ff;
-    }
+        .logo-img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+        }
 
-    .search-input {
-        width: 220px;
-        border-radius: 20px;
-    }
+        .brand-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+        }
 
-    .cart-icon {
-        position: relative;
-        color: #fff;
-        font-size: 18px;
-    }
-</style>
+        .search-box input {
+            border-radius: 20px 0 0 20px;
+        }
 
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/user/home">Logo</a>
+        .search-box button {
+            border-radius: 0 20px 20px 0;
+            background: #ffc107;
+            font-weight: 600;
+        }
 
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        .user-cart {
+            color: white;
+            font-weight: 500;
+        }
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/user/home">Trang chủ</a>
-                </li>
+        .cart-icon {
+            background: #ffc107;
+            color: #000;
+            padding: 6px 10px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
 
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="${pageContext.request.contextPath}/user/product">Sản phẩm</a>
-                </li>
-            </ul>
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .header-custom {
+                text-align: center;
+            }
+
+            .search-box {
+                margin-top: 10px;
+            }
+
+            .user-cart {
+                margin-top: 10px;
+            }
+        }
+    </style>
 
 
-            <form class="d-flex me-3"
-                  action="${pageContext.request.contextPath}/user/search"
-                  method="get">
+</head>
+<body>
+    <div class="header-custom">
 
-                <input class="form-control form-control-sm search-input me-2"
-                       type="search"
-                       name="keyword"
-                       placeholder="Tìm sản phẩm...">
+        <div class="row align-items-center">
 
-                <button class="btn btn-outline-light btn-sm" type="submit">
-                    <i class="fa fa-search"></i>
-                </button>
-            </form>
+            <!-- LOGO -->
+            <div class="col-md-3 d-flex align-items-center justify-content-md-start justify-content-center">
+                <img src="${pageContext.request.contextPath}/images/TTSHop.png" class="logo-img">
+                <span class="brand-name ms-2">TokTok Shop</span>
+            </div>
 
-            <a href="${pageContext.request.contextPath}/user/cart"
-               class="me-3 cart-icon">
-                <i class="fa fa-shopping-cart"></i>
-            </a>
+            <!-- SEARCH -->
+            <div class="col-md-6 search-box">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm...">
+                    <button class="btn btn-warning">Tìm</button>
+                </div>
+            </div>
 
-            <a href="${pageContext.request.contextPath}/user/profile"
-               class="me-3 cart-icon">
-                <i class="fa fa-user"></i>
-            </a>
+            <!-- USER + CART -->
+            <div class="col-md-3 text-md-end text-center user-cart">
+                <span>Xin chào, User</span>
+                <span class="cart-icon">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </span>
+            </div>
 
-            <a class="btn btn-outline-light btn-sm"
-               href="${pageContext.request.contextPath}/login">Đăng nhập
-            </a>
         </div>
+
     </div>
-</nav>
+
+
+    <!-- SLIDER -->
+    <div class="container mt-3">
+
+        <div id="mainSlider" class="carousel slide" data-bs-ride="carousel">
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
+            </div>
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <img src="${pageContext.request.contextPath}/images/img.png"
+                         class="d-block w-100 rounded"
+                         style="height:420px; object-fit:cover;">
+                </div>
+
+                <div class="carousel-item">
+                    <img src="${pageContext.request.contextPath}/images/slider1.png"
+                         class="d-block w-100 rounded"
+                         style="height:420px; object-fit:cover;">
+                </div>
+                <div class="carousel-item">
+                    <img src="${pageContext.request.contextPath}/images/slider2.jpg"
+                         class="d-block w-100 rounded"
+                         style="height:420px; object-fit:cover;">
+                </div>
+
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- QUAN TRỌNG: Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
