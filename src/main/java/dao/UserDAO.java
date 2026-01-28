@@ -15,7 +15,7 @@ public interface UserDAO {
 
     User login(String usernameOrEmail, String password);
 
-    User findUserByUsernameOrPhone(String UsernameOrPhone);
+    List<User> findByUsernameOrPhone(String keyword);
 
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);

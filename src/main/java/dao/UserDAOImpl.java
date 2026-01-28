@@ -89,18 +89,18 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public User findUserByUsernameOrPhone(String UsernameOrPhone) {
+    public List<User> findByUsernameOrPhone(String keyword) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT u FROM User u WHERE u.username = :UsernameOrPhone OR u.username = :UsernameOrPhone";
+            String jpql = "SELECT u FROM User u WHERE u.username LIKE :kw OR u.phone LIKE :kw";
             TypedQuery<User> query = em.createQuery(jpql, User.class);
-            query.setParameter("UsernameOrPhone", UsernameOrPhone);
-            List<User> list = query.getResultList();
-            return list.isEmpty() ? null : list.get(0);
+            query.setParameter("kw", "%" + keyword + "%");
+            return query.getResultList();
         } finally {
             em.close();
         }
     }
+
 
     @Override
     public User findUserById(String userId) {

@@ -189,14 +189,17 @@
     </div>
   </div>
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <div class="d-flex mb-2">
-        <input type="text" class="form-control w25 me-2">
-        <button class="btn btn-primary">Tìm</button>
-      </div>
-    </div>
-  </div>
+  <form action="${url}/search" method="get" class="d-flex mb-2">
+    <input type="text"
+           name="keyword"
+           value="${param.keyword}"
+           class="form-control w-25 me-2"
+           placeholder="Username hoặc SĐT">
+    <button class="btn btn-primary">
+      <i class="fa-solid fa-magnifying-glass"></i> Tìm
+    </button>
+  </form>
+
 
   <div class="card shadow-sm mb-4">
     <div class="card-body">

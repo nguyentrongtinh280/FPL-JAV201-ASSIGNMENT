@@ -18,7 +18,8 @@ import java.io.IOException;
         "/admin/user/delete",
         "/admin/user/update",
         "/admin/user/edit/*",
-        "/admin/user/reset"
+        "/admin/user/reset",
+        "/admin/user/search"
 })
 public class UserControler extends HttpServlet {
 
@@ -39,6 +40,17 @@ public class UserControler extends HttpServlet {
         if (path.endsWith("/reset")) {
             req.setAttribute("user", new User());
             req.setAttribute("isEdit", false);
+        }
+        if (path.endsWith("/search")) {
+            String keyword = req.getParameter("keyword");
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                req.setAttribute("users", userDAO.findByUsernameOrPhone(keyword.trim()));
+            } else {
+                req.setAttribute("users", userDAO.getAllUsers());
+            }
+
+            req.getRequestDispatcher("/view/User.jsp").forward(req, resp);
+            return;
         }
         req.getRequestDispatcher("/view/User.jsp").forward(req, resp);
     }
