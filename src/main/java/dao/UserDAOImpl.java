@@ -101,4 +101,60 @@ public class UserDAOImpl implements UserDAO{
             em.close();
         }
     }
+
+    @Override
+    public User findUserById(String userId) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.userId = :userId";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("userId", userId);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
+            Long count = em.createQuery(jpql, Long.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            return count > 0;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(u) FROM User u WHERE u.email = :email";
+            Long count = em.createQuery(jpql, Long.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+            return count > 0;
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public boolean existsByPhone(String phone) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(u) FROM User u WHERE u.phone = :phone";
+            Long count = em.createQuery(jpql, Long.class)
+                    .setParameter("phone", phone)
+                    .getSingleResult();
+            return count > 0;
+        } finally {
+            em.close();
+        }
+    }
+
 }

@@ -26,10 +26,10 @@ public class User {
     @Column(name = "Password", length = 255, nullable = false)
     private String password;
 
-    @Column(name = "Role", length = 20)
-    private String role;
+    @Column(name = "Role", nullable = false)
+    private boolean role;
 
-    @Column(name = "Phone", length = 20)
+    @Column(name = "Phone", length = 20, unique = true)
     private String phone;
 
     @Column(name = "Address", length = 255)
@@ -45,7 +45,8 @@ public class User {
     private Cart cart;
 
 
-    public User(String userId, String username, String fullname, String email, String password, String role, String phone, String address, LocalDateTime createDate, List<Order> orders, Cart cart) {
+    public User(String userId, String username, String fullname, String email, String password, boolean role,
+                String phone, String address, LocalDateTime createDate, List<Order> orders, Cart cart) {
         this.userId = userId;
         this.username = username;
         this.fullname = fullname;
@@ -102,11 +103,11 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public boolean isRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(boolean role) {
         this.role = role;
     }
 

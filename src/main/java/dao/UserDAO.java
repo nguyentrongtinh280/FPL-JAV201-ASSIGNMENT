@@ -9,11 +9,16 @@ public interface UserDAO {
     void updateUser(User user);
     void deleteUser(String userId);
 //    User findUserByUsername(String username);
-//    User findUserByEmail(String email);
+    User findUserById(String userId);
 
     List<User> getAllUsers();
 
     User login(String usernameOrEmail, String password);
 
     User findUserByUsernameOrPhone(String UsernameOrPhone);
+
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+    boolean existsByPhone(String phone);
+
 }
