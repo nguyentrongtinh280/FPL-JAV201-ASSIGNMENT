@@ -61,11 +61,12 @@
       </ul>
 
       <span class="navbar-text text-white me-3">
-        <i class="fa fa-user"></i> Admin
+        <i class="fa fa-user"></i> ${sessionScope.currentUser.fullname}
       </span>
 
       <a class="btn btn-outline-light btn-sm"
-         href="${pageContext.request.contextPath}/logout">Đăng xuất
+         href="${pageContext.request.contextPath}/logout">
+        <div class="fw-bold">Đăng xuất</div>
       </a>
     </div>
   </div>
