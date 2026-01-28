@@ -8,13 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
     <style>
-
-
         h3 {
             font-weight: 600;
             letter-spacing: 1px;
         }
-
         .product-card {
             background: #ffffff;
             border-radius: 12px;
@@ -24,13 +21,11 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             border: 1px solid #eee;
         }
-
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 18px rgba(13,110,253,0.25);
             border-color: #0d6efd;
         }
-
         .product-img {
             height: 150px;
             border-radius: 10px;
@@ -41,23 +36,19 @@
             justify-content: center;
             overflow: hidden;
         }
-
         .product-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .product-name {
             font-weight: 500;
             margin-top: 5px;
         }
-
         .product-price {
             color: #e53935;
             font-weight: bold;
         }
-
         .btn-cart {
             background: #0d6efd;
             color: white;
@@ -70,12 +61,10 @@
             display: inline-block;
             margin-top: 6px;
         }
-
         .btn-cart:hover {
             background: #084298;
             color: white;
         }
-
         .pagination-custom a {
             color: #555;
             border: 1px solid #ddd;
@@ -86,7 +75,6 @@
             transition: 0.3s;
             background: white;
         }
-
         .pagination-custom a:hover {
             background: #0d6efd;
             color: white;
