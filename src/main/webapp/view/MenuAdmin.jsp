@@ -55,23 +55,19 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/home">Trang chủ</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/home">Trang chủ</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/category">Quản lý danh mục</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/category">Quản lý danh mục</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/product">Quản lý sản phẩm</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/product">Quản lý sản phẩm</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/user">Quản lý người dùng</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link text-white" href="${pageContext.request.contextPath}/admin/statistical">Thống kê</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/user">Quản lý người dùng</a>
         </li>
       </ul>
 
