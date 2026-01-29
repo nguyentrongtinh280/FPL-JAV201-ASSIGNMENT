@@ -1,10 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Nhập OTP</title>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             margin: 0;
@@ -14,14 +17,12 @@
             align-items: center;
             font-family: 'Segoe UI', sans-serif;
             background: #c3c3c3;
-
         }
 
         .reset-box {
             width: 600px;
             padding: 40px 45px;
             border-radius: 25px;
-            background: #1a6363;
             background: radial-gradient(circle at top, #1e3c72, #0f2027);
             box-shadow: 0 0 30px rgba(0,0,0,0.8);
             color: white;
@@ -34,15 +35,13 @@
 
         .logo-box img {
             width: 90px;
-            filter: drop-shadow(0 0 6px rgba(0,153,255,0.6));
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: 24px;
             font-weight: 600;
-            letter-spacing: 1px;
         }
 
         label {
@@ -61,13 +60,8 @@
             border-radius: 8px;
         }
 
-        .input-dark:focus {
-            border-color: #2f9bff;
-            box-shadow: 0 0 6px rgba(47,155,255,0.6);
-        }
-
         .row-line {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .btn-outline-light {
@@ -85,8 +79,6 @@
             border-color: #2f9bff;
         }
     </style>
-
-
 </head>
 
 <body>
@@ -98,33 +90,52 @@
         <img src="${pageContext.request.contextPath}/images/TTSHop.png">
     </div>
 
-    <!-- TITLE -->
     <h2>Khôi Phục Mật Khẩu</h2>
 
-    <!-- FORM -->
-    <form action="reset-password" method="post">
+    <!-- HIỂN THỊ THÔNG BÁO -->
+    <c:if test="${not empty message}">
+        <div class="alert alert-warning text-center">
+                ${message}
+        </div>
+    </c:if>
 
-        <!-- Username -->
+    <!-- FORM -->
+    <form action="forgot-password" method="post">
+
+        <!-- USERNAME -->
         <div class="row-line">
             <label>Tên đăng nhập</label>
-            <input type="text" name="username" class="form-control input-dark" required>
+            <input type="text" name="username"
+                   value="${param.username}"
+                   class="form-control input-dark" required>
         </div>
 
-        <!-- Email + Send OTP -->
+        <!-- EMAIL + SEND OTP -->
         <div class="row-line">
-            <label>Nhập Email</label>
+            <label>Email</label>
             <div class="d-flex gap-2">
-                <input type="email" name="email" class="form-control input-dark" required>
-                <button type="button" class="btn btn-outline-light">Gửi OTP</button>
+                <input type="email" name="email"
+                       value="${param.email}"
+                       class="form-control input-dark" required>
+
+                <button type="submit" name="action" value="sendOtp"
+                        class="btn btn-outline-light">
+                    Gửi OTP
+                </button>
             </div>
         </div>
 
-        <!-- OTP + Confirm -->
+        <!-- OTP + VERIFY -->
         <div class="row-line">
             <label>Nhập OTP</label>
             <div class="d-flex gap-2">
-                <input type="text" name="otp" class="form-control input-dark" required>
-                <button type="submit" class="btn btn-outline-light">Xác Nhận</button>
+                <input type="text" name="otp"
+                       class="form-control input-dark">
+
+                <button type="submit" name="action" value="verifyOtp"
+                        class="btn btn-outline-light">
+                    Xác Nhận
+                </button>
             </div>
         </div>
 
