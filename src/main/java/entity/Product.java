@@ -30,6 +30,11 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductDetail> productDetails;
 
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+    }
+
     public Product(String productId, String productName, Category category,
                    String description, LocalDateTime createdAt, List<ProductDetail> productDetails) {
         this.productId = productId;

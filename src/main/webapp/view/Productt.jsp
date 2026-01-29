@@ -96,9 +96,15 @@
 
           <div class="col-md-3">
             <label class="form-label">Size</label>
-            <input type="text" name="size"
-                   class="form-control"
-                   value="${detail.size}" required>
+            <select name="size" class="form-select" required>
+              <option value="">-- Chọn size --</option>
+              <option value="S"  ${detail.size == 'S'  ? 'selected' : ''}>S</option>
+              <option value="M"  ${detail.size == 'M'  ? 'selected' : ''}>M</option>
+              <option value="L"  ${detail.size == 'L'  ? 'selected' : ''}>L</option>
+              <option value="XL" ${detail.size == 'XL' ? 'selected' : ''}>XL</option>
+              <option value="XXL"${detail.size == 'XXL'? 'selected' : ''}>XXL</option>
+            </select>
+            <div class="invalid-feedback">Vui lòng chọn size</div>
           </div>
 
           <div class="col-md-3">
