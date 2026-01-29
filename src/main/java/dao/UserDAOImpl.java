@@ -5,10 +5,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 import utils.XJPA;
-
 import java.util.List;
 
-public class UserDAOImpl implements UserDAO{
+public class UserDAOImpl implements UserDAO {
 
     @Override
     public void createUser(User user) {
@@ -49,9 +48,7 @@ public class UserDAOImpl implements UserDAO{
         try {
             transaction.begin();
             User user = em.find(User.class, userId);
-            if (user != null) {
-                em.remove(user);
-            }
+            if (user != null) em.remove(user);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -66,8 +63,7 @@ public class UserDAOImpl implements UserDAO{
         EntityManager em = XJPA.getEntityManager();
         try {
             String jpql = "SELECT u FROM User u";
-            TypedQuery<User> query = em.createQuery(jpql, User.class);
-            return query.getResultList();
+            return em.createQuery(jpql, User.class).getResultList();
         } finally {
             em.close();
         }
@@ -77,10 +73,10 @@ public class UserDAOImpl implements UserDAO{
     public User login(String usernameOrEmail, String password) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT u FROM User u WHERE (u.email = :usernameOrEmail OR u.username = :usernameOrEmail) AND u.password = :password";
+            String jpql = "SELECT u FROM User u WHERE (u.email = :ue OR u.username = :ue) AND u.password = :pw";
             TypedQuery<User> query = em.createQuery(jpql, User.class);
-            query.setParameter("usernameOrEmail", usernameOrEmail);
-            query.setParameter("password", password);
+            query.setParameter("ue", usernameOrEmail);
+            query.setParameter("pw", password);
             List<User> list = query.getResultList();
             return list.isEmpty() ? null : list.get(0);
         } finally {
@@ -93,9 +89,9 @@ public class UserDAOImpl implements UserDAO{
         EntityManager em = XJPA.getEntityManager();
         try {
             String jpql = "SELECT u FROM User u WHERE u.username LIKE :kw OR u.phone LIKE :kw";
-            TypedQuery<User> query = em.createQuery(jpql, User.class);
-            query.setParameter("kw", "%" + keyword + "%");
-            return query.getResultList();
+            return em.createQuery(jpql, User.class)
+                    .setParameter("kw", "%" + keyword + "%")
+                    .getResultList();
         } finally {
             em.close();
         }
@@ -105,10 +101,7 @@ public class UserDAOImpl implements UserDAO{
     public User findUserById(String userId) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT u FROM User u WHERE u.userId = :userId";
-            TypedQuery<User> query = em.createQuery(jpql, User.class);
-            query.setParameter("userId", userId);
-            return query.getSingleResult();
+            return em.find(User.class, userId);
         } finally {
             em.close();
         }
@@ -118,9 +111,9 @@ public class UserDAOImpl implements UserDAO{
     public boolean existsByUsername(String username) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
+            String jpql = "SELECT COUNT(u) FROM User u WHERE u.username = :un";
             Long count = em.createQuery(jpql, Long.class)
-                    .setParameter("username", username)
+                    .setParameter("un", username)
                     .getSingleResult();
             return count > 0;
         } finally {
@@ -132,9 +125,9 @@ public class UserDAOImpl implements UserDAO{
     public boolean existsByEmail(String email) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT COUNT(u) FROM User u WHERE u.email = :email";
+            String jpql = "SELECT COUNT(u) FROM User u WHERE u.email = :em";
             Long count = em.createQuery(jpql, Long.class)
-                    .setParameter("email", email)
+                    .setParameter("em", email)
                     .getSingleResult();
             return count > 0;
         } finally {
@@ -146,9 +139,9 @@ public class UserDAOImpl implements UserDAO{
     public boolean existsByPhone(String phone) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT COUNT(u) FROM User u WHERE u.phone = :phone";
+            String jpql = "SELECT COUNT(u) FROM User u WHERE u.phone = :ph";
             Long count = em.createQuery(jpql, Long.class)
-                    .setParameter("phone", phone)
+                    .setParameter("ph", phone)
                     .getSingleResult();
             return count > 0;
         } finally {
@@ -160,11 +153,47 @@ public class UserDAOImpl implements UserDAO{
     public User findUserByEmailOrUsername(String emailOrUsername) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT u FROM User u WHERE (u.email = :emailUsername OR u.username = :emailUsername)";
+            String jpql = "SELECT u FROM User u WHERE u.email = :eou OR u.username = :eou";
             TypedQuery<User> query = em.createQuery(jpql, User.class);
-            query.setParameter("emailUsername", emailOrUsername);
+            query.setParameter("eou", emailOrUsername);
             List<User> list = query.getResultList();
             return list.isEmpty() ? null : list.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
+    // PHẦN BỔ SUNG QUÊN MẬT KHẨU
+
+    @Override
+    public User findByUsername(String username) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE u.username = :un";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("un", username);
+            List<User> list = query.getResultList();
+            return list.isEmpty() ? null : list.get(0);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public void updatePassword(String username, String newPassword) {
+        EntityManager em = XJPA.getEntityManager();
+        EntityTransaction tr = em.getTransaction();
+        try {
+            tr.begin();
+            String jpql = "UPDATE User u SET u.password = :pw WHERE u.username = :un";
+            em.createQuery(jpql)
+                    .setParameter("pw", newPassword)
+                    .setParameter("un", username)
+                    .executeUpdate();
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            e.printStackTrace();
         } finally {
             em.close();
         }
