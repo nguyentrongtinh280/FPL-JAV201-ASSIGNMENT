@@ -57,9 +57,9 @@
           <i class="fa fa-envelope me-2"></i>support@shopthoitrang.com
         </p>
         <div class="mt-2">
-          <a href="#" class="me-3"><i class="fab fa-facebook fa-lg"></i></a>
-          <a href="#" class="me-3"><i class="fab fa-instagram fa-lg"></i></a>
-          <a href="#"><i class="fab fa-tiktok fa-lg"></i></a>
+          <a href="https://www.facebook.com/" class="me-3"><i class="fab fa-facebook fa-lg"></i></a>
+          <a href="https://www.instagram.com/" class="me-3"><i class="fab fa-instagram fa-lg"></i></a>
+          <a href="https://www.tiktok.com/"><i class="fab fa-tiktok fa-lg"></i></a>
         </div>
       </div>
     </div>

@@ -1,21 +1,21 @@
 package dao;
 
-import entity.Product;
+import entity.ProductDetail;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import utils.XJPA;
 
 import java.util.List;
 
-public class ProductDAOImpl implements ProductDAO {
+public class ProductDetailDAOImpl implements ProductDetailDAO {
 
     @Override
-    public void create(Product product) {
+    public void create(ProductDetail pd) {
         EntityManager em = XJPA.getEntityManager();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            em.persist(product);
+            em.persist(pd);
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -26,12 +26,12 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
-    public void update(Product product) {
+    public void update(ProductDetail pd) {
         EntityManager em = XJPA.getEntityManager();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
-            em.merge(product);
+            em.merge(pd);
             tr.commit();
         } catch (Exception e) {
             tr.rollback();
@@ -41,64 +41,52 @@ public class ProductDAOImpl implements ProductDAO {
         }
     }
 
-    // Xóa Product + toàn bộ ProductDetail liên quan
     @Override
-    public void delete(String productId) {
+    public void delete(String productDetailId) {
         EntityManager em = XJPA.getEntityManager();
         EntityTransaction tr = em.getTransaction();
         try {
             tr.begin();
+            ProductDetail pd = em.find(ProductDetail.class, productDetailId);
+            if (pd != null) em.remove(pd);
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
 
-            // Xóa ProductDetail trước
-            String jpql = "DELETE FROM ProductDetail pd WHERE pd.product.productId = :pid";
-            em.createQuery(jpql)
+    @Override
+    public ProductDetail findById(String productDetailId) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            return em.find(ProductDetail.class, productDetailId);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<ProductDetail> findByProductId(String productId) {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT pd FROM ProductDetail pd WHERE pd.product.productId = :pid";
+            return em.createQuery(jpql, ProductDetail.class)
                     .setParameter("pid", productId)
-                    .executeUpdate();
-
-            // Xóa Product
-            Product product = em.find(Product.class, productId);
-            if (product != null) {
-                em.remove(product);
-            }
-
-            tr.commit();
-        } catch (Exception e) {
-            tr.rollback();
-            e.printStackTrace();
-        } finally {
-            em.close();
-        }
-    }
-
-    @Override
-    public Product findById(String productId) {
-        EntityManager em = XJPA.getEntityManager();
-        try {
-            return em.find(Product.class, productId);
-        } finally {
-            em.close();
-        }
-    }
-
-    @Override
-    public List<Product> findAll() {
-        EntityManager em = XJPA.getEntityManager();
-        try {
-            String jpql = "SELECT p FROM Product p ORDER BY p.createdAt DESC";
-            return em.createQuery(jpql, Product.class).getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    @Override
-    public List<Product> findByName(String keyword) {
-        EntityManager em = XJPA.getEntityManager();
-        try {
-            String jpql = "SELECT p FROM Product p WHERE p.productName LIKE :kw";
-            return em.createQuery(jpql, Product.class)
-                    .setParameter("kw", "%" + keyword + "%")
                     .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<ProductDetail> findAll() {
+        EntityManager em = XJPA.getEntityManager();
+        try {
+            String jpql = "SELECT pd FROM ProductDetail pd";
+            return em.createQuery(jpql, ProductDetail.class).getResultList();
         } finally {
             em.close();
         }
