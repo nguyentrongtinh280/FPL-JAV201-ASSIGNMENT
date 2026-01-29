@@ -22,6 +22,8 @@ public class LoginFilter implements Filter {
 
         boolean isLoginPage = uri.endsWith("Login.jsp");
         boolean isLoginServlet = uri.endsWith("/login");
+        boolean register = uri.endsWith("/register");
+        boolean homeUser = uri.endsWith("/home");
 
         boolean isResource =
                 uri.contains("/css/") ||
@@ -29,7 +31,7 @@ public class LoginFilter implements Filter {
                         uri.contains("/images/") ||
                         uri.contains("/fonts/");
 
-        if (isLoginPage || isLoginServlet || isResource) {
+        if (isLoginPage || isLoginServlet || isResource || homeUser || register) {
             chain.doFilter(request, response);
             return;
         }
