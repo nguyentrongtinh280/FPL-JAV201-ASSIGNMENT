@@ -32,18 +32,19 @@ public class LoginFilter implements Filter {
                 || uri.contains("/fonts/");
 
         if (isLoginPage || isLoginServlet || isForgotPage || isResource) {
-        if (isLoginPage || isLoginServlet || isResource || homeUser || register) {
-            chain.doFilter(request, response);
-            return;
-        }
+            if (isLoginPage || isLoginServlet || isResource || homeUser || register) {
+                chain.doFilter(request, response);
+                return;
+            }
 
-        HttpSession session = req.getSession(false);
-        Object user = (session != null) ? session.getAttribute("currentUser") : null;
+            HttpSession session = req.getSession(false);
+            Object user = (session != null) ? session.getAttribute("currentUser") : null;
 
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-        } else {
-            chain.doFilter(request, response);
+            if (user == null) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+            } else {
+                chain.doFilter(request, response);
+            }
         }
     }
 }
