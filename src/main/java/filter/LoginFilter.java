@@ -19,32 +19,31 @@ public class LoginFilter implements Filter {
 
         String uri = req.getRequestURI();
 
-        boolean isLoginPage = uri.contains("/Login.jsp");
-        boolean isLoginServlet = uri.endsWith("/login");
-        // Bổ sung thêm gửi mã OTP nếu quên mật khẩu
-        boolean isForgotPage = uri.contains("/OTP.jsp") || uri.contains("/forgot-password");
-        boolean register = uri.endsWith("/register");
-        boolean homeUser = uri.endsWith("/home");
+        boolean isPublic =
+                uri.endsWith("/index.jsp")
+                        || uri.endsWith("/")
+                        || uri.contains("/Login.jsp")
+                        || uri.contains("/Register.jsp")
+                        || uri.contains("/OTP.jsp")
+                        || uri.endsWith("/login")
+                        || uri.endsWith("/register")
+                        || uri.contains("/css/")
+                        || uri.contains("/js/")
+                        || uri.contains("/images/")
+                        || uri.contains("/fonts/");
 
-        boolean isResource = uri.contains("/css/")
-                || uri.contains("/js/")
-                || uri.contains("/images/")
-                || uri.contains("/fonts/");
+        if (isPublic) {
+            chain.doFilter(request, response);
+            return;
+        }
 
-        if (isLoginPage || isLoginServlet || isForgotPage || isResource) {
-            if (isLoginPage || isLoginServlet || isResource || homeUser || register) {
-                chain.doFilter(request, response);
-                return;
-            }
+        HttpSession session = req.getSession(false);
+        Object user = (session != null) ? session.getAttribute("currentUser") : null;
 
-            HttpSession session = req.getSession(false);
-            Object user = (session != null) ? session.getAttribute("currentUser") : null;
-
-            if (user == null) {
-                resp.sendRedirect(req.getContextPath() + "/login");
-            } else {
-                chain.doFilter(request, response);
-            }
+        if (user == null) {
+            resp.sendRedirect(req.getContextPath() + "/Login.jsp");
+        } else {
+            chain.doFilter(request, response);
         }
     }
 }
