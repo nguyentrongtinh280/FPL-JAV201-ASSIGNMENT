@@ -3,23 +3,23 @@ package dao;
 import entity.Product;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import utils.XJPA;
 
 import java.util.List;
 
 public class ProductDAOImpl implements ProductDAO {
-
     @Override
     public void create(Product product) {
         EntityManager em = XJPA.getEntityManager();
-        EntityTransaction tr = em.getTransaction();
+        EntityTransaction tx = em.getTransaction();
         try {
-            tr.begin();
+            tx.begin();
             em.persist(product);
-            tr.commit();
+            tx.commit();
         } catch (Exception e) {
-            tr.rollback();
-            e.printStackTrace();
+            tx.rollback();
+            throw e;
         } finally {
             em.close();
         }
@@ -28,43 +28,33 @@ public class ProductDAOImpl implements ProductDAO {
     @Override
     public void update(Product product) {
         EntityManager em = XJPA.getEntityManager();
-        EntityTransaction tr = em.getTransaction();
+        EntityTransaction tx = em.getTransaction();
         try {
-            tr.begin();
+            tx.begin();
             em.merge(product);
-            tr.commit();
+            tx.commit();
         } catch (Exception e) {
-            tr.rollback();
-            e.printStackTrace();
+            tx.rollback();
+            throw e;
         } finally {
             em.close();
         }
     }
 
-    // Xóa Product + toàn bộ ProductDetail liên quan
     @Override
     public void delete(String productId) {
         EntityManager em = XJPA.getEntityManager();
-        EntityTransaction tr = em.getTransaction();
+        EntityTransaction tx = em.getTransaction();
         try {
-            tr.begin();
-
-            // Xóa ProductDetail trước
-            String jpql = "DELETE FROM ProductDetail pd WHERE pd.product.productId = :pid";
-            em.createQuery(jpql)
-                    .setParameter("pid", productId)
-                    .executeUpdate();
-
-            // Xóa Product
+            tx.begin();
             Product product = em.find(Product.class, productId);
             if (product != null) {
                 em.remove(product);
             }
-
-            tr.commit();
+            tx.commit();
         } catch (Exception e) {
-            tr.rollback();
-            e.printStackTrace();
+            tx.rollback();
+            throw e;
         } finally {
             em.close();
         }
@@ -84,21 +74,69 @@ public class ProductDAOImpl implements ProductDAO {
     public List<Product> findAll() {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT p FROM Product p ORDER BY p.createdAt DESC";
-            return em.createQuery(jpql, Product.class).getResultList();
+            TypedQuery<Product> query =
+                    em.createQuery("SELECT p FROM Product p ORDER BY p.createdAt DESC", Product.class);
+            return query.getResultList();
         } finally {
             em.close();
         }
     }
 
     @Override
-    public List<Product> findByName(String keyword) {
+    public List<Product> search(String keyword) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT p FROM Product p WHERE p.productName LIKE :kw";
-            return em.createQuery(jpql, Product.class)
-                    .setParameter("kw", "%" + keyword + "%")
-                    .getResultList();
+            keyword = keyword.trim();
+
+            // 1. Nếu là khoảng giá (vd: 100000-300000)
+            if (keyword.matches("\\d+\\s*-\\s*\\d+")) {
+                String[] parts = keyword.split("-");
+                Double min = Double.parseDouble(parts[0].trim());
+                Double max = Double.parseDouble(parts[1].trim());
+
+                TypedQuery<Product> query = em.createQuery(
+                        """
+                        SELECT DISTINCT p
+                        FROM Product p
+                        JOIN p.productDetails d
+                        WHERE d.price BETWEEN :min AND :max
+                        """,
+                        Product.class
+                );
+                query.setParameter("min", min);
+                query.setParameter("max", max);
+                return query.getResultList();
+            }
+
+            if (keyword.matches("\\d+")) {
+                Double price = Double.parseDouble(keyword);
+
+                TypedQuery<Product> query = em.createQuery(
+                        """
+                        SELECT DISTINCT p
+                        FROM Product p
+                        JOIN p.productDetails d
+                        WHERE d.price = :price
+                        """,
+                        Product.class
+                );
+                query.setParameter("price", price);
+                return query.getResultList();
+            }
+
+            TypedQuery<Product> query = em.createQuery(
+                    """
+                    SELECT DISTINCT p
+                    FROM Product p
+                    JOIN p.category c
+                    WHERE LOWER(p.productName) LIKE LOWER(:kw)
+                       OR LOWER(c.categoryName) LIKE LOWER(:kw)
+                    """,
+                    Product.class
+            );
+            query.setParameter("kw", "%" + keyword + "%");
+            return query.getResultList();
+
         } finally {
             em.close();
         }
