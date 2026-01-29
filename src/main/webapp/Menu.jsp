@@ -119,7 +119,7 @@
                          class="d-block w-100 rounded"
                          style="height:420px; object-fit:cover;">
                 </div>
-                <div class="carousel-item">
+                <div class="carousel-item active">
                     <img src="${pageContext.request.contextPath}/images/slider2.jpg"
                          class="d-block w-100 rounded"
                          style="height:420px; object-fit:cover;">
@@ -141,7 +141,6 @@
 
 </div>
 
-<!-- QUAN TRỌNG: Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

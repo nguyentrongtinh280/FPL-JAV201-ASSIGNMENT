@@ -20,7 +20,9 @@ public interface UserDAO {
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
     boolean existsByPhone(String phone);
-
+// Them Phan Gui MA OTP ve Email Da Dang Ki
     User findUserByEmailOrUsername(String emailOrUsername);
+    User findByUsername(String username);
 
+    void updatePassword(String username, String newPassword);
 }

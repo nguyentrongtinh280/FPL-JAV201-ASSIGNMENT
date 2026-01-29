@@ -10,7 +10,7 @@
   <style>
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #6f86d6, #9f5bd1);
+      background: #c3c3c3;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -103,7 +103,7 @@
               Ghi nhớ đăng nhập
             </label>
           </div>
-          <a href="#">Quên mật khẩu?</a>
+          <a href="OTP.jsp">Quên mật khẩu?</a>
         </div>
 
         <div class="d-grid mb-3">
@@ -112,7 +112,10 @@
           </button>
         </div>
         <div class="text-center">
-          <span>Chưa có tài khoản?</span> <a href="Register.jsp" class="fw-bold text-decoration-none"> Đăng ký </a>
+          <span>Chưa có tài khoản?</span>
+          <a href="${pageContext.request.contextPath}/register" class="fw-bold text-decoration-none">
+            Đăng ký
+          </a>
         </div>
       </form>
     </div>

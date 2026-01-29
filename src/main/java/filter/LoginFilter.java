@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-
 @WebFilter("/*")
 public class LoginFilter implements Filter {
 
@@ -20,16 +19,20 @@ public class LoginFilter implements Filter {
 
         String uri = req.getRequestURI();
 
-        boolean isLoginPage = uri.endsWith("Login.jsp");
+        boolean isLoginPage = uri.contains("/Login.jsp");
         boolean isLoginServlet = uri.endsWith("/login");
+        // Bổ sung thêm gửi mã OTP nếu quên mật khẩu
+        boolean isForgotPage = uri.contains("/OTP.jsp") || uri.contains("/forgot-password");
+        boolean register = uri.endsWith("/register");
+        boolean homeUser = uri.endsWith("/home");
 
-        boolean isResource =
-                uri.contains("/css/") ||
-                        uri.contains("/js/") ||
-                        uri.contains("/images/") ||
-                        uri.contains("/fonts/");
+        boolean isResource = uri.contains("/css/")
+                || uri.contains("/js/")
+                || uri.contains("/images/")
+                || uri.contains("/fonts/");
 
-        if (isLoginPage || isLoginServlet || isResource) {
+        if (isLoginPage || isLoginServlet || isForgotPage || isResource) {
+        if (isLoginPage || isLoginServlet || isResource || homeUser || register) {
             chain.doFilter(request, response);
             return;
         }
