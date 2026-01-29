@@ -151,6 +151,11 @@ public class User {
         this.cart = cart;
     }
 
+    @PrePersist
+    public void prePersist() {
+        createDate = LocalDateTime.now();
+    }
+
 
     @Override
     public String toString() {
