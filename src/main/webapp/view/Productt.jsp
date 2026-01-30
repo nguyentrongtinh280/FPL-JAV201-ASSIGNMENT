@@ -148,8 +148,9 @@
   </div>
 
   <form action="${url}/search" class="d-flex mb-3">
-    <input name="keyword" class="form-control w-25 me-2" placeholder="Tên sản phẩm">
-    <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+    <input name="keyword" class="form-control w-25 me-2" placeholder="Tên sản phẩm, giá, danh mục">
+    <button class="btn btn-primary"><i class="fa fa-search"></i> Tìm kiếm
+    </button>
   </form>
 
   <div class="card shadow">

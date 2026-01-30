@@ -22,11 +22,12 @@ public class LoginFilter implements Filter {
         boolean isPublic =
                 uri.endsWith("/index.jsp")
                         || uri.endsWith("/")
+                        || uri.endsWith("/home")
+                        || uri.endsWith("/login")
+                        || uri.endsWith("/register")
                         || uri.contains("/Login.jsp")
                         || uri.contains("/Register.jsp")
                         || uri.contains("/OTP.jsp")
-                        || uri.endsWith("/login")
-                        || uri.endsWith("/register")
                         || uri.contains("/css/")
                         || uri.contains("/js/")
                         || uri.contains("/images/")
@@ -41,7 +42,7 @@ public class LoginFilter implements Filter {
         Object user = (session != null) ? session.getAttribute("currentUser") : null;
 
         if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/Login.jsp");
+            resp.sendRedirect(req.getContextPath() + "/login");
         } else {
             chain.doFilter(request, response);
         }
