@@ -47,14 +47,6 @@ public class ProductDetail {
     public ProductDetail() {
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public String getProductDetailId() {
         return productDetailId;
     }
@@ -85,6 +77,14 @@ public class ProductDetail {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public Integer getQuantity() {

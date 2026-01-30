@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <html>
 <head>
     <title>Menu</title>
@@ -36,16 +38,43 @@
         .user-cart {
             color: white;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .cart-wrapper {
+            position: relative;
+            cursor: pointer;
         }
 
         .cart-icon {
             background: #ffc107;
             color: #000;
-            padding: 6px 10px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
         }
 
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        .user-name {
+            white-space: nowrap;
+        }
         /* Mobile responsive */
         @media (max-width: 768px) {
             .header-custom {
@@ -75,21 +104,52 @@
             </div>
 
             <div class="col-md-6 search-box">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm...">
-                    <button class="btn btn-warning">Tìm</button>
-                </div>
+                <form action="${pageContext.request.contextPath}/home" method="get">
+                    <div class="input-group">
+                        <input type="text"
+                               name="keyword"
+                               class="form-control"
+                               placeholder="Tìm theo tên, loại hoặc giá (vd: 100-500)">
+                        <button class="btn btn-warning">
+                            <i class="fa fa-search"></i> Tìm kiếm
+                        </button>
+                    </div>
+                </form>
             </div>
+
 
             <div class="col-md-3 text-md-end text-center user-cart">
-                <span>Xin chào, User</span>
-                <span class="cart-icon">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                </span>
+
+                <a href="${pageContext.request.contextPath}/cart"
+                   class="cart-wrapper text-decoration-none">
+                    <div class="cart-icon">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <span class="cart-badge">3</span>
+                </a>
+
+                <c:if test="${empty sessionScope.currentUser}">
+                    <a href="${pageContext.request.contextPath}/login"
+                       class="btn btn-outline-light btn-sm">
+                        <i class="fa fa-sign-in-alt"></i> Đăng nhập
+                    </a>
+                </c:if>
+
+                <c:if test="${not empty sessionScope.currentUser}">
+<%--                <span class="user-name">--%>
+<%--                    Xin chào,--%>
+<%--                    <strong>${sessionScope.currentUser.fullname}</strong>--%>
+<%--                </span>--%>
+                    <a href="${pageContext.request.contextPath}/logout"
+                       class="btn btn-outline-light btn-sm">
+                        <i class="fa fa-sign-out-alt"></i> Đăng xuất
+                    </a>
+                </c:if>
+
             </div>
+
         </div>
     </div>
-
 
     <div class="container mt-3">
         <div id="mainSlider" class="carousel slide" data-bs-ride="carousel">

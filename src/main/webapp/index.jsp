@@ -61,7 +61,6 @@
 
 <div class="container mt-4">
     <div class="row g-4">
-
         <c:forEach items="${products}" var="p">
             <c:if test="${not empty p.productDetails}">
                 <c:set var="d" value="${p.productDetails[0]}"/>
@@ -69,13 +68,15 @@
                 <div class="col-md-3 col-sm-4 col-6">
                     <div class="product-card">
                         <div class="product-img">
-                            <img src="${pageContext.request.contextPath}/images/ao1.jpg"
+                            <img src="${pageContext.request.contextPath}/images/${d.image}"
                                  alt="${p.productName}">
                         </div>
 
                         <div class="product-name">${p.productName}</div>
+
                         <div class="product-price">
                                 ${d.price} đ
+                                    <p>IMG PATH: ${pageContext.request.contextPath}/images/${d.image}</p>
                         </div>
 
                         <a href="#" class="btn-cart">
@@ -83,9 +84,9 @@
                         </a>
                     </div>
                 </div>
-
             </c:if>
         </c:forEach>
+
     </div>
 </div>
 
