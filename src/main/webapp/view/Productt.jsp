@@ -10,122 +10,103 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <style>
-    .page-title {
-      color: #2a5298;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-    .card {
-      border-radius: 12px;
-    }
-    .form-control, .form-select {
-      border-radius: 8px;
-    }
-    .btn {
-      border-radius: 8px;
-      padding: 8px 18px;
-    }
-    .table thead {
-      background-color: #2a5298;
-      color: #fff;
-    }
-    .table tbody tr:hover {
-      background-color: #eef3ff;
-    }
-    img.product-img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
+    .page-title { color:#2a5298;font-weight:700 }
+    .card { border-radius:12px }
+    .form-control,.form-select,.btn { border-radius:8px }
+    .table thead { background:#2a5298;color:#fff }
+    img.product-img { width:60px;height:60px;object-fit:cover;border-radius:8px }
   </style>
 </head>
 
-<body class="d-flex flex-column min-vh-100 bg-white pt-5">
-
+<body class="bg-light pt-5">
 <jsp:include page="MenuAdmin.jsp"/>
 
-<main class="container my-4 flex-fill">
+<main class="container my-4">
   <c:url var="url" value="/admin/product"/>
-  <br>
-
-  <div class="card shadow-sm mb-4">
+  <div class="card shadow mb-4">
     <div class="card-body">
-      <h4 class="page-title text-center">Thông tin sản phẩm</h4>
+      <h4 class="page-title text-center mb-3">Thông tin sản phẩm</h4>
 
-      <form action="${url}" method="post" enctype="multipart/form-data"
-            id="productForm" novalidate>
+      <form method="post" enctype="multipart/form-data">
+
+        <c:if test="${isEdit}">
+          <div class="mb-3">
+            <label class="form-label">Mã sản phẩm</label>
+            <input class="form-control" readonly value="${product.productId}">
+            <input type="hidden" name="productId" value="${product.productId}">
+          </div>
+        </c:if>
+
         <div class="row g-3">
-
-          <c:if test="${isEdit}">
-            <div class="col-md-4">
-              <label class="form-label">Mã sản phẩm</label>
-              <input type="text" name="productId"
-                     class="form-control"
-                     value="${product.productId}" readonly>
-            </div>
-          </c:if>
-
           <div class="col-md-6">
             <label class="form-label">Tên sản phẩm</label>
-            <input type="text" name="productName"
-                   class="form-control"
-                   value="${product.productName}" required>
-            <div class="invalid-feedback">Vui lòng nhập tên sản phẩm</div>
+            <input name="productName"
+                   value="${product.productName}"
+                   class="form-control ${not empty errorProductName?'is-invalid':''}">
+            <div class="invalid-feedback">${errorProductName}</div>
           </div>
 
           <div class="col-md-6">
             <label class="form-label">Danh mục</label>
-            <select name="categoryId" class="form-select" required>
+            <select name="categoryId"
+                    class="form-select ${not empty errorCategory?'is-invalid':''}">
               <option value="">-- Chọn danh mục --</option>
               <c:forEach items="${categories}" var="c">
                 <option value="${c.categoryId}"
-                  ${product.category.categoryId == c.categoryId ? 'selected' : ''}>
+                  ${product.category.categoryId==c.categoryId?'selected':''}>
                     ${c.categoryName}
                 </option>
               </c:forEach>
             </select>
-            <div class="invalid-feedback">Vui lòng chọn danh mục</div>
+            <div class="invalid-feedback">${errorCategory}</div>
           </div>
 
           <div class="col-md-12">
             <label class="form-label">Mô tả</label>
-            <textarea name="description" rows="3"
-                      class="form-control">${product.description}</textarea>
+            <textarea name="description" class="form-control"
+                      rows="3">${product.description}</textarea>
           </div>
 
           <div class="col-md-3">
             <label class="form-label">Size</label>
-            <select name="size" class="form-select" required>
-              <option value="">-- Chọn size --</option>
-              <option value="S"  ${detail.size == 'S'  ? 'selected' : ''}>S</option>
-              <option value="M"  ${detail.size == 'M'  ? 'selected' : ''}>M</option>
-              <option value="L"  ${detail.size == 'L'  ? 'selected' : ''}>L</option>
-              <option value="XL" ${detail.size == 'XL' ? 'selected' : ''}>XL</option>
-              <option value="XXL"${detail.size == 'XXL'? 'selected' : ''}>XXL</option>
+            <select name="size"
+                    class="form-select ${not empty errorSize?'is-invalid':''}">
+              <option value="">-- Chọn --</option>
+              <c:forEach var="s" items="${['S','M','L','XL','XXL']}">
+                <option value="${s}" ${detail.size==s?'selected':''}>${s}</option>
+              </c:forEach>
             </select>
-            <div class="invalid-feedback">Vui lòng chọn size</div>
+            <div class="invalid-feedback">${errorSize}</div>
           </div>
 
           <div class="col-md-3">
             <label class="form-label">Màu sắc</label>
-            <input type="text" name="color"
-                   class="form-control"
-                   value="${detail.color}" required>
+            <select name="color"
+                    class="form-select ${not empty errorColor?'is-invalid':''}">
+              <option value="">-- Chọn --</option>
+              <c:forEach var="c" items="${['Đen','Trắng','Đỏ','Xanh','Vàng','Xám']}">
+                <option value="${c}" ${detail.color==c?'selected':''}>${c}</option>
+              </c:forEach>
+            </select>
+            <div class="invalid-feedback">${errorColor}</div>
           </div>
 
           <div class="col-md-3">
             <label class="form-label">Giá</label>
-            <input type="number" step="0.01" name="price"
-                   class="form-control"
-                   value="${detail.price}" required>
+            <input type="number" step="0.01"
+                   name="price"
+                   value="${detail.price}"
+                   class="form-control ${not empty errorPrice?'is-invalid':''}">
+            <div class="invalid-feedback">${errorPrice}</div>
           </div>
 
           <div class="col-md-3">
             <label class="form-label">Số lượng</label>
-            <input type="number" name="quantity"
-                   class="form-control"
-                   value="${detail.quantity}" required>
+            <input type="number"
+                   name="quantity"
+                   value="${detail.quantity}"
+                   class="form-control ${not empty errorQuantity?'is-invalid':''}">
+            <div class="invalid-feedback">${errorQuantity}</div>
           </div>
 
           <div class="col-md-6">
@@ -136,48 +117,44 @@
           <div class="col-md-6">
             <label class="form-label">Trạng thái</label>
             <select name="status" class="form-select">
-              <option value="ACTIVE" ${detail.status == 'ACTIVE' ? 'selected' : ''}>Đang bán</option>
-              <option value="INACTIVE" ${detail.status == 'INACTIVE' ? 'selected' : ''}>Ngừng bán</option>
+              <option value="">-- Chọn --</option>
+              <option value="ACTIVE" ${detail.status=='ACTIVE'?'selected':''}>Đang bán</option>
+              <option value="INACTIVE" ${detail.status=='INACTIVE'?'selected':''}>Ngừng bán</option>
             </select>
           </div>
-
-          <div class="text-center mt-4">
-            <button type="submit" formaction="${url}/create" class="btn btn-primary me-2">
-              <i class="fa fa-plus"></i> Thêm
-            </button>
-
-            <button type="submit" formaction="${url}/update" class="btn btn-warning me-2">
-              <i class="fa fa-pen"></i> Sửa
-            </button>
-
-            <button type="submit" formaction="${url}/delete"
-                    class="btn btn-danger me-2"
-                    onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
-              <i class="fa fa-trash"></i> Xóa
-            </button>
-
-            <button type="submit" formaction="${url}/reset" class="btn btn-success">
-              <i class="fa fa-rotate"></i> Mới
-            </button>
-          </div>
-
         </div>
+
+        <div class="text-center mt-4">
+          <button formaction="${url}/create" class="btn btn-primary">
+              <i class="fa fa-plus"></i> Thêm
+          </button>
+
+          <button formaction="${url}/update" class="btn btn-warning me-2">
+            <i class="fa fa-pen"></i> Sửa
+          </button>
+
+          <button formaction="${url}/delete" onclick="return confirm('Xóa sản phẩm?')"
+                  class="btn btn-danger me-2">
+            <i class="fa fa-trash"></i> Xóa
+          </button>
+
+          <button formaction="${url}/reset" class="btn btn-success">
+            <i class="fa fa-rotate"></i> Mới
+          </button>
+        </div>
+
       </form>
     </div>
   </div>
 
-  <form action="${url}/search" method="get" class="d-flex mb-3">
-    <input type="text" name="keyword"
-           class="form-control w-25 me-2"
-           placeholder="Nhập tên sản phẩm">
-    <button class="btn btn-primary">
-      <i class="fa fa-search"></i> Tìm kiếm
-    </button>
+  <form action="${url}/search" class="d-flex mb-3">
+    <input name="keyword" class="form-control w-25 me-2" placeholder="Tên sản phẩm">
+    <button class="btn btn-primary"><i class="fa fa-search"></i></button>
   </form>
 
-  <div class="card shadow-sm mb-4">
+  <div class="card shadow">
     <div class="card-body">
-      <h5 class="page-title">Danh sách sản phẩm</h5>
+      <h5 class="page-title mb-3">Danh sách sản phẩm</h5>
 
       <table class="table table-bordered table-hover text-center align-middle">
         <thead>
@@ -188,8 +165,8 @@
           <th>Size</th>
           <th>Màu</th>
           <th>Giá</th>
-          <th>Số lượng</th>
-          <th>Hình ảnh</th>
+          <th>SL</th>
+          <th>Ảnh</th>
           <th>Trạng thái</th>
           <th>Hành động</th>
         </tr>
@@ -197,29 +174,32 @@
 
         <tbody>
         <c:forEach items="${products}" var="p">
-          <tr>
-            <td>${p.productId}</td>
-            <td>${p.productName}</td>
-            <td>${p.category.categoryName}</td>
-            <td>${p.size}</td>
-            <td>${p.color}</td>
-            <td>${p.price}</td>
-            <td>${p.quantity}</td>
-            <td>
-              <img src="${pageContext.request.contextPath}/images/${p.image}"
-                   class="product-img">
-            </td>
-            <td>
-              <span class="badge ${p.status == 'ACTIVE' ? 'bg-success' : 'bg-secondary'}">
-                  ${p.status == 'ACTIVE' ? 'Đang bán' : 'Ngừng bán'}
-              </span>
-            </td>
-            <td>
-              <a href="${url}/edit?id=${p.productId}">
-                <i class="fa fa-pen"></i> Sửa
-              </a>
-            </td>
-          </tr>
+          <c:if test="${not empty p.productDetails}">
+            <c:set var="d" value="${p.productDetails[0]}"/>
+            <tr>
+              <td>${p.productId}</td>
+              <td>${p.productName}</td>
+              <td>${p.category.categoryName}</td>
+              <td>${d.size}</td>
+              <td>${d.color}</td>
+              <td>${d.price}</td>
+              <td>${d.quantity}</td>
+              <td>
+                <img src="${pageContext.request.contextPath}/images/${d.image}" class="product-img">
+              </td>
+              <td>
+                <span class="badge ${d.status=='ACTIVE'?'bg-success':'bg-danger'}">
+                    ${d.status=='ACTIVE'?'Đang bán':'Ngừng bán'}
+                </span>
+              </td>
+              <td>
+                <a href="${url}/edit?id=${p.productId}"
+                   class="btn btn-sm btn-outline-warning">
+                  <i class="fa fa-pen"></i> Sửa
+                </a>
+              </td>
+            </tr>
+          </c:if>
         </c:forEach>
         </tbody>
       </table>
@@ -227,32 +207,6 @@
   </div>
 
 </main>
-
 <jsp:include page="FooterAdmin.jsp"/>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const form = document.getElementById("productForm");
-  const buttons = document.querySelectorAll("button[formaction]");
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", e => {
-      const action = btn.getAttribute("formaction");
-      const needValidate =
-              action.endsWith("/create") || action.endsWith("/update");
-
-      if (needValidate) {
-        form.classList.add("was-validated");
-        if (!form.checkValidity()) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      } else {
-        form.classList.remove("was-validated");
-      }
-    });
-  });
-</script>
-
 </body>
 </html>

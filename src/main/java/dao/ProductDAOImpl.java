@@ -64,7 +64,18 @@ public class ProductDAOImpl implements ProductDAO {
     public Product findById(String productId) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            return em.find(Product.class, productId);
+            TypedQuery<Product> query = em.createQuery(
+                    """
+                    SELECT p
+                    FROM Product p
+                    LEFT JOIN FETCH p.productDetails
+                    LEFT JOIN FETCH p.category
+                    WHERE p.productId = :id
+                    """,
+                    Product.class
+            );
+            query.setParameter("id", productId);
+            return query.getSingleResult();
         } finally {
             em.close();
         }
@@ -74,9 +85,13 @@ public class ProductDAOImpl implements ProductDAO {
     public List<Product> findAll() {
         EntityManager em = XJPA.getEntityManager();
         try {
-            TypedQuery<Product> query =
-                    em.createQuery("SELECT p FROM Product p ORDER BY p.createdAt DESC", Product.class);
-            return query.getResultList();
+            String jpql = """
+                SELECT DISTINCT p
+                FROM Product p
+                LEFT JOIN FETCH p.productDetails
+                LEFT JOIN FETCH p.category
+            """;
+            return em.createQuery(jpql, Product.class).getResultList();
         } finally {
             em.close();
         }
@@ -87,55 +102,47 @@ public class ProductDAOImpl implements ProductDAO {
         EntityManager em = XJPA.getEntityManager();
         try {
             keyword = keyword.trim();
-
-            // 1. Nếu là khoảng giá (vd: 100000-300000)
             if (keyword.matches("\\d+\\s*-\\s*\\d+")) {
                 String[] parts = keyword.split("-");
-                Double min = Double.parseDouble(parts[0].trim());
-                Double max = Double.parseDouble(parts[1].trim());
+                double min = Double.parseDouble(parts[0].trim());
+                double max = Double.parseDouble(parts[1].trim());
 
-                TypedQuery<Product> query = em.createQuery(
-                        """
-                        SELECT DISTINCT p
-                        FROM Product p
-                        JOIN p.productDetails d
-                        WHERE d.price BETWEEN :min AND :max
-                        """,
-                        Product.class
-                );
-                query.setParameter("min", min);
-                query.setParameter("max", max);
-                return query.getResultList();
+                return em.createQuery("""
+                SELECT DISTINCT p
+                FROM Product p
+                JOIN FETCH p.productDetails d
+                JOIN FETCH p.category
+                WHERE d.price BETWEEN :min AND :max
+            """, Product.class)
+                        .setParameter("min", min)
+                        .setParameter("max", max)
+                        .getResultList();
             }
 
             if (keyword.matches("\\d+")) {
-                Double price = Double.parseDouble(keyword);
+                double price = Double.parseDouble(keyword);
 
-                TypedQuery<Product> query = em.createQuery(
-                        """
-                        SELECT DISTINCT p
-                        FROM Product p
-                        JOIN p.productDetails d
-                        WHERE d.price = :price
-                        """,
-                        Product.class
-                );
-                query.setParameter("price", price);
-                return query.getResultList();
+                return em.createQuery("""
+                SELECT DISTINCT p
+                FROM Product p
+                JOIN FETCH p.productDetails d
+                JOIN FETCH p.category
+                WHERE d.price = :price
+            """, Product.class)
+                        .setParameter("price", price)
+                        .getResultList();
             }
 
-            TypedQuery<Product> query = em.createQuery(
-                    """
-                    SELECT DISTINCT p
-                    FROM Product p
-                    JOIN p.category c
-                    WHERE LOWER(p.productName) LIKE LOWER(:kw)
-                       OR LOWER(c.categoryName) LIKE LOWER(:kw)
-                    """,
-                    Product.class
-            );
-            query.setParameter("kw", "%" + keyword + "%");
-            return query.getResultList();
+            return em.createQuery("""
+            SELECT DISTINCT p
+            FROM Product p
+            JOIN FETCH p.category c
+            JOIN FETCH p.productDetails d
+            WHERE LOWER(p.productName) LIKE LOWER(:kw)
+               OR LOWER(c.categoryName) LIKE LOWER(:kw)
+        """, Product.class)
+                    .setParameter("kw", "%" + keyword + "%")
+                    .getResultList();
 
         } finally {
             em.close();

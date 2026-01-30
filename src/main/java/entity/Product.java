@@ -27,8 +27,13 @@ public class Product {
     @Column(name = "CreatedAt")
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<ProductDetail> productDetails;
+
 
     @PrePersist
     public void prePersist() {

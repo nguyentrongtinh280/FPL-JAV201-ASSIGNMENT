@@ -17,8 +17,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.time.LocalDateTime;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,8 +26,8 @@ import java.util.UUID;
 @WebServlet({
         "/admin/product",
         "/admin/product/create",
-        "/admin/product/delete",
         "/admin/product/update",
+        "/admin/product/delete",
         "/admin/product/edit/*",
         "/admin/product/reset",
         "/admin/product/search"
@@ -36,8 +35,8 @@ import java.util.UUID;
 @MultipartConfig
 public class ProductController extends HttpServlet {
 
-    private final ProductDAO productDAO = new ProductDAOImpl();
-    private final CategoryDAO categoryDAO = new CategoryDAOImpl();
+    ProductDAO productDAO = new ProductDAOImpl();
+    CategoryDAO categoryDAO = new CategoryDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -46,6 +45,14 @@ public class ProductController extends HttpServlet {
         String uri = req.getRequestURI();
 
         loadCommonData(req);
+        List<Product> products = productDAO.findAll();
+
+        if (uri.contains("/search")) {
+            String keyword = req.getParameter("keyword");
+            if (keyword != null && !keyword.isBlank()) {
+                products = productDAO.search(keyword);
+            }
+        }
 
         if (uri.contains("/edit")) {
             String id = req.getParameter("id");
@@ -55,59 +62,33 @@ public class ProductController extends HttpServlet {
             req.setAttribute("isEdit", true);
         }
 
-        if (uri.contains("/search")) {
-            String keyword = req.getParameter("keyword");
-            req.setAttribute("products", productDAO.search(keyword));
-        }
-
+        req.setAttribute("products", products);
         req.getRequestDispatcher("/view/Productt.jsp").forward(req, resp);
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        Map<String, String> errors = new HashMap<>();
+        String uri = req.getRequestURI();
 
-        String productName = req.getParameter("productName");
-        String categoryId = req.getParameter("categoryId");
-        String size = req.getParameter("size");
-        String color = req.getParameter("color");
-        String priceStr = req.getParameter("price");
-        String quantityStr = req.getParameter("quantity");
-
-        // VALIDATE
-        if (productName == null || productName.isBlank())
-            errors.put("errorProductName", "Tên sản phẩm không được để trống");
-
-        if (categoryId == null || categoryId.isBlank())
-            errors.put("errorCategory", "Vui lòng chọn danh mục");
-
-        if (size == null || size.isBlank())
-            errors.put("errorSize", "Vui lòng chọn size");
-
-        if (color == null || color.isBlank())
-            errors.put("errorColor", "Vui lòng chọn màu");
-
-        double price = 0;
-        if (priceStr == null || priceStr.isBlank()) {
-            errors.put("errorPrice", "Giá không được để trống");
-        } else {
-            price = Double.parseDouble(priceStr);
-            if (price <= 0)
-                errors.put("errorPrice", "Giá phải > 0");
+        if (uri.contains("/create")) {
+            create(req, resp);
+        } else if (uri.contains("/update")) {
+            update(req, resp);
+        } else if (uri.contains("/delete")) {
+            delete(req, resp);
+        } else if (uri.contains("/reset")) {
+            resp.sendRedirect(req.getContextPath() + "/admin/product");
         }
+    }
 
-        int quantity = 0;
-        if (quantityStr == null || quantityStr.isBlank()) {
-            errors.put("errorQuantity", "Số lượng không được để trống");
-        } else {
-            quantity = Integer.parseInt(quantityStr);
-            if (quantity < 0)
-                errors.put("errorQuantity", "Số lượng >= 0");
-        }
+    private void create(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
 
-        // Nếu có lỗi → quay lại form
+        Map<String, String> errors = validate(req);
+
         if (!errors.isEmpty()) {
             errors.forEach(req::setAttribute);
             loadCommonData(req);
@@ -115,51 +96,109 @@ public class ProductController extends HttpServlet {
             return;
         }
 
-        // UPLOAD IMAGE
-        Part imagePart = req.getPart("image");
-        String imageName = null;
-
-        if (imagePart != null && imagePart.getSize() > 0) {
-            imageName = UUID.randomUUID() + "_" + imagePart.getSubmittedFileName();
-            String path = req.getServletContext().getRealPath("/images");
-            Files.createDirectories(new File(path).toPath());
-            imagePart.write(path + File.separator + imageName);
-        }
-
         Category category = new Category();
-        category.setCategoryId(categoryId);
+        category.setCategoryId(req.getParameter("categoryId"));
 
         Product product = new Product();
-        product.setProductName(productName);
+        product.setProductName(req.getParameter("productName"));
         product.setCategory(category);
         product.setDescription(req.getParameter("description"));
-        product.setCreatedAt(LocalDateTime.now());
 
         ProductDetail detail = new ProductDetail();
-        detail.setProduct(product);
-        detail.setSize(size);
-        detail.setColor(color);
-        detail.setPrice(price);
-        detail.setQuantity(quantity);
-        detail.setImage(imageName);
-        detail.setStatus(req.getParameter("status"));
+        fillDetail(req, detail);
 
+        detail.setProduct(product);
         product.setProductDetails(List.of(detail));
 
-        if (req.getRequestURI().contains("/create")) {
-            productDAO.create(product);
-        }
-
-        if (req.getRequestURI().contains("/update")) {
-            product.setProductId(req.getParameter("productId"));
-            productDAO.update(product);
-        }
-
+        productDAO.create(product);
         resp.sendRedirect(req.getContextPath() + "/admin/product");
+    }
+
+    private void update(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+
+        Product product = productDAO.findById(req.getParameter("productId"));
+
+        product.setProductName(req.getParameter("productName"));
+        product.setDescription(req.getParameter("description"));
+
+        ProductDetail detail = product.getProductDetails().get(0);
+        fillDetail(req, detail);
+
+        productDAO.update(product);
+        resp.sendRedirect(req.getContextPath() + "/admin/product");
+    }
+
+    private void delete(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException {
+        productDAO.delete(req.getParameter("productId"));
+        resp.sendRedirect(req.getContextPath() + "/admin/product");
+    }
+
+    private Map<String, String> validate(HttpServletRequest req) {
+        Map<String, String> errors = new HashMap<>();
+
+        if (req.getParameter("productName").isBlank())
+            errors.put("errorProductName", "Tên sản phẩm không được trống");
+
+        if (req.getParameter("categoryId").isBlank())
+            errors.put("errorCategory", "Vui lòng chọn danh mục");
+
+        if (req.getParameter("size").isBlank())
+            errors.put("errorSize", "Vui lòng chọn size");
+
+        if (req.getParameter("color").isBlank())
+            errors.put("errorColor", "Vui lòng chọn màu");
+
+        if (req.getParameter("price").isBlank())
+            errors.put("errorPrice", "Giá không hợp lệ");
+
+        if (req.getParameter("quantity").isBlank())
+            errors.put("errorQuantity", "Số lượng không hợp lệ");
+
+        return errors;
+    }
+
+    private ProductDetail buildDetail(HttpServletRequest req, Product product)
+            throws IOException, ServletException {
+
+        ProductDetail d = new ProductDetail();
+        d.setProduct(product);
+        fillDetail(req, d);
+        return d;
+    }
+
+    private static final String IMAGE_FOLDER = "images";
+
+    private void fillDetail(HttpServletRequest req, ProductDetail d)
+            throws IOException, ServletException {
+
+        d.setSize(req.getParameter("size"));
+        d.setColor(req.getParameter("color"));
+        d.setPrice(Double.valueOf(req.getParameter("price")));
+        d.setQuantity(Integer.valueOf(req.getParameter("quantity")));
+        d.setStatus(req.getParameter("status"));
+
+        Part file = req.getPart("image");
+        if (file != null && file.getSize() > 0) {
+
+            String fileName = UUID.randomUUID() + "_" +
+                    Paths.get(file.getSubmittedFileName()).getFileName().toString();
+
+            String realPath = req.getServletContext().getRealPath("/" + IMAGE_FOLDER);
+
+            File uploadDir = new File(realPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            file.write(realPath + File.separator + fileName);
+
+            d.setImage(fileName);
+        }
     }
 
     private void loadCommonData(HttpServletRequest req) {
         req.setAttribute("categories", categoryDAO.findAll());
-        req.setAttribute("products", productDAO.findAll());
     }
 }
