@@ -69,13 +69,11 @@
 
         <div class="row align-items-center">
 
-            <!-- LOGO -->
             <div class="col-md-3 d-flex align-items-center justify-content-md-start justify-content-center">
                 <img src="${pageContext.request.contextPath}/images/TTSHop.png" class="logo-img">
                 <span class="brand-name ms-2">TokTok Shop</span>
             </div>
 
-            <!-- SEARCH -->
             <div class="col-md-6 search-box">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm...">
@@ -83,24 +81,18 @@
                 </div>
             </div>
 
-            <!-- USER + CART -->
             <div class="col-md-3 text-md-end text-center user-cart">
                 <span>Xin chào, User</span>
                 <span class="cart-icon">
                     <i class="fa-solid fa-cart-shopping"></i>
                 </span>
             </div>
-
         </div>
-
     </div>
 
 
-    <!-- SLIDER -->
     <div class="container mt-3">
-
         <div id="mainSlider" class="carousel slide" data-bs-ride="carousel">
-
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active"></button>
                 <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
