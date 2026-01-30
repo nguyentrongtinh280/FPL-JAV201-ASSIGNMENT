@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-@WebFilter("/*")
+@WebFilter(
+        urlPatterns = "/*",
+        dispatcherTypes = DispatcherType.REQUEST
+)
 public class LoginFilter implements Filter {
 
     @Override
@@ -19,19 +22,23 @@ public class LoginFilter implements Filter {
 
         String uri = req.getRequestURI();
 
+        if (uri.contains("/images/")
+                || uri.contains("/css/")
+                || uri.contains("/js/")
+                || uri.contains("/fonts/")) {
+
+            chain.doFilter(request, response);
+            return;
+        }
+
         boolean isPublic =
-                uri.endsWith("/index.jsp")
-                        || uri.endsWith("/")
-                        || uri.endsWith("/home")
+                uri.equals(req.getContextPath() + "/")
+                || uri.endsWith("/home")
                         || uri.endsWith("/login")
                         || uri.endsWith("/register")
-                        || uri.contains("/Login.jsp")
-                        || uri.contains("/Register.jsp")
-                        || uri.contains("/OTP.jsp")
-                        || uri.contains("/css/")
-                        || uri.contains("/js/")
-                        || uri.contains("/images/")
-                        || uri.contains("/fonts/");
+                        || uri.contains("Login.jsp")
+                        || uri.contains("Register.jsp")
+                        || uri.contains("OTP.jsp");
 
         if (isPublic) {
             chain.doFilter(request, response);
