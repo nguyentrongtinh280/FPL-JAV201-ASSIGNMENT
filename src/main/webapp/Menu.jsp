@@ -90,8 +90,6 @@
             }
         }
     </style>
-
-
 </head>
 <body>
     <div class="header-custom">
@@ -99,7 +97,9 @@
         <div class="row align-items-center">
 
             <div class="col-md-3 d-flex align-items-center justify-content-md-start justify-content-center">
-                <img src="${pageContext.request.contextPath}/images/TTSHop.png" class="logo-img">
+                <img src="${pageContext.request.contextPath}/images/TTSHop.png"
+                     alt="Logo"
+                     style="width:55px;height:55px">
                 <span class="brand-name ms-2">TokTok Shop</span>
             </div>
 
@@ -152,29 +152,44 @@
     </div>
 
     <div class="container mt-3">
-        <div id="mainSlider" class="carousel slide" data-bs-ride="carousel">
+        <div id="mainSlider"
+             class="carousel slide carousel-fade"
+             data-bs-ride="carousel"
+             data-bs-interval="3000"
+             data-bs-pause="false">
+
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="0" class="active"></button>
-                <button type="button" data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
+                <button data-bs-target="#mainSlider" data-bs-slide-to="0" class="active"></button>
+                <button data-bs-target="#mainSlider" data-bs-slide-to="1"></button>
+                <button data-bs-target="#mainSlider" data-bs-slide-to="2"></button>
+                <button data-bs-target="#mainSlider" data-bs-slide-to="3"></button>
+                <button data-bs-target="#mainSlider" data-bs-slide-to="4"></button>
             </div>
 
             <div class="carousel-inner">
-
                 <div class="carousel-item active">
-                    <img src="${pageContext.request.contextPath}/images/img.png"
-                         class="d-block w-100 rounded"
-                         style="height:420px; object-fit:cover;">
+                    <img src="${pageContext.request.contextPath}/images/slider11.png"
+                         class="d-block w-100" style="height:420px;object-fit:cover">
                 </div>
 
                 <div class="carousel-item">
-                    <img src="${pageContext.request.contextPath}/images/slider1.png"
-                         class="d-block w-100 rounded"
-                         style="height:420px; object-fit:cover;">
+                    <img src="${pageContext.request.contextPath}/images/slider12.png"
+                         class="d-block w-100" style="height:420px;object-fit:cover">
                 </div>
-                <div class="carousel-item active">
-                    <img src="${pageContext.request.contextPath}/images/slider2.jpg"
-                         class="d-block w-100 rounded"
-                         style="height:420px; object-fit:cover;">
+
+                <div class="carousel-item">
+                    <img src="${pageContext.request.contextPath}/images/slider13.png"
+                         class="d-block w-100" style="height:420px;object-fit:cover">
+                </div>
+
+                <div class="carousel-item">
+                    <img src="${pageContext.request.contextPath}/images/slider14.png"
+                         class="d-block w-100" style="height:420px;object-fit:cover">
+                </div>
+
+                <div class="carousel-item">
+                    <img src="${pageContext.request.contextPath}/images/slider15.png"
+                         class="d-block w-100" style="height:420px;object-fit:cover">
                 </div>
 
             </div>
@@ -182,16 +197,11 @@
             <button class="carousel-control-prev" type="button" data-bs-target="#mainSlider" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
             </button>
-
             <button class="carousel-control-next" type="button" data-bs-target="#mainSlider" data-bs-slide="next">
                 <span class="carousel-control-next-icon"></span>
             </button>
-
         </div>
-
     </div>
-
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

@@ -22,6 +22,6 @@ public class LogoutController extends HttpServlet {
 
         resp.addCookie(cUser);
 
-        resp.sendRedirect(req.getContextPath() + "/login");
+        resp.sendRedirect(req.getContextPath() + "/home");
     }
 }

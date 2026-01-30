@@ -26,7 +26,7 @@ public class HomeUserController extends HttpServlet {
         } else {
             req.setAttribute("products", productDAO.findAll());
         }
-        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("/Home.jsp").forward(req, resp);
     }
 }
 
