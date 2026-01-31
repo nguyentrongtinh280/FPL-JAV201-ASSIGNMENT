@@ -65,6 +65,7 @@
           <div class="col-md-12">
             <label class="form-label">Mô tả</label>
             <textarea name="description" class="form-control"
+                      value="${product.description}"
                       rows="3">${product.description}</textarea>
           </div>
 
