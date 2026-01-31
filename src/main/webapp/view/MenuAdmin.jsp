@@ -55,19 +55,19 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
         <li class="nav-item">
-          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/home">Trang chủ</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/home">TRANG CHỦ</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/category">Quản lý danh mục</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/category">QUẢN LÝ DANH MỤC</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/product">Quản lý sản phẩm</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/product">QUẢN LÝ SẢN PHẨM</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/user">Quản lý người dùng</a>
+          <a class="nav-link text-white fw-bold" href="${pageContext.request.contextPath}/admin/user">QUẢN LÝ NGƯỜI DÙNG</a>
         </li>
       </ul>
 
@@ -77,7 +77,7 @@
 
       <a class="btn btn-outline-light btn-sm"
          href="${pageContext.request.contextPath}/logout">
-        <div class="fw-bold">Đăng xuất</div>
+        <div class="fw-bold">ĐĂNG XUẤT</div>
       </a>
     </div>
   </div>

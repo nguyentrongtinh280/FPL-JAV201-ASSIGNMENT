@@ -103,7 +103,12 @@
               Ghi nhớ đăng nhập
             </label>
           </div>
-          <a href="OTP.jsp">Quên mật khẩu?</a>
+
+          <a href="${pageContext.request.contextPath}/forgot-password">
+            Quên mật khẩu?
+          </a>
+
+
         </div>
 
         <div class="d-grid mb-3">

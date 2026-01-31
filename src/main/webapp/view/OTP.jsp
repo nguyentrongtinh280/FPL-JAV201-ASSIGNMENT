@@ -98,9 +98,7 @@
                 ${message}
         </div>
     </c:if>
-
-    <!-- FORM -->
-    <form action="forgot-password" method="post">
+    <form action="${pageContext.request.contextPath}/forgot-password" method="post">
 
         <!-- USERNAME -->
         <div class="row-line">
@@ -125,21 +123,26 @@
             </div>
         </div>
 
-        <!-- OTP + VERIFY -->
-        <div class="row-line">
-            <label>Nhập OTP</label>
-            <div class="d-flex gap-2">
-                <input type="text" name="otp"
-                       class="form-control input-dark">
+        <!-- CHỈ HIỆN OTP SAU KHI GỬI -->
+        <c:if test="${not empty sessionScope.otp}">
+            <div class="row-line">
+                <label>Nhập OTP</label>
+                <div class="d-flex gap-2">
+                    <input type="text" name="otp"
+                           class="form-control input-dark"
+                           placeholder="Nhập mã OTP" required>
 
-                <button type="submit" name="action" value="verifyOtp"
-                        class="btn btn-outline-light">
-                    Xác Nhận
-                </button>
+                    <button type="submit" name="action" value="verifyOtp"
+                            class="btn btn-outline-light">
+                        Xác Nhận
+                    </button>
+                </div>
             </div>
-        </div>
+        </c:if>
 
     </form>
+
+
 
 </div>
 

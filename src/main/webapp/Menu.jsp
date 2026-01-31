@@ -12,7 +12,6 @@
             background: linear-gradient(90deg, #1e3c72, #2a5298);
             padding: 10px 20px;
         }
-
         .logo-img {
             width: 55px;
             height: 55px;
@@ -93,9 +92,7 @@
 </head>
 <body>
     <div class="header-custom">
-
         <div class="row align-items-center">
-
             <div class="col-md-3 d-flex align-items-center justify-content-md-start justify-content-center">
                 <img src="${pageContext.request.contextPath}/images/TTSHop.png"
                      alt="Logo"
@@ -131,7 +128,7 @@
                 <c:if test="${empty sessionScope.currentUser}">
                     <a href="${pageContext.request.contextPath}/login"
                        class="btn btn-outline-light btn-sm">
-                        <i class="fa fa-sign-in-alt"></i> Đăng nhập
+                        <i class="fa fa-sign-in-alt"></i> ĐĂNG NHẬP
                     </a>
                 </c:if>
 
@@ -142,7 +139,7 @@
 <%--                </span>--%>
                     <a href="${pageContext.request.contextPath}/logout"
                        class="btn btn-outline-light btn-sm">
-                        <i class="fa fa-sign-out-alt"></i> Đăng xuất
+                        <i class="fa fa-sign-out-alt"></i> ĐĂNG XUẤT
                     </a>
                 </c:if>
 
