@@ -36,6 +36,9 @@ public class LoginFilter implements Filter {
                 || uri.endsWith("/home")
                         || uri.endsWith("/login")
                         || uri.endsWith("/register")
+                        || uri.endsWith("/forgot-password")
+                        || uri.endsWith("/reset-password")
+                        || uri.contains("ResetPassword.jsp")
                         || uri.contains("Login.jsp")
                         || uri.contains("Register.jsp")
                         || uri.contains("OTP.jsp");
