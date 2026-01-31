@@ -1,5 +1,7 @@
 package entity;
 
+import enumType.OrderStatus;
+import enumType.PaymentStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -27,24 +29,32 @@ public class Order {
     @Column(name = "PaymentMethod", length = 50)
     private String paymentMethod;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "PaymentStatus", length = 30)
-    private String paymentStatus;
+    private PaymentStatus paymentStatus;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "OrderStatus", length = 30)
-    private String orderStatus;
+    private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
+
+    @PrePersist
+    public void prePersist() {
+        orderDate = LocalDateTime.now();
+    }
 
     public Order() {
     }
 
-    public Order(Double totalAmount, String orderId, User user, LocalDateTime orderDate,
-                 String paymentMethod, String paymentStatus, String orderStatus, List<OrderDetail> orderDetails) {
-        this.totalAmount = totalAmount;
+    public Order(String orderId, User user, LocalDateTime orderDate, Double totalAmount, String paymentMethod,
+                 PaymentStatus paymentStatus, OrderStatus orderStatus, List<OrderDetail> orderDetails) {
         this.orderId = orderId;
         this.user = user;
         this.orderDate = orderDate;
+        this.totalAmount = totalAmount;
         this.paymentMethod = paymentMethod;
         this.paymentStatus = paymentStatus;
         this.orderStatus = orderStatus;
@@ -91,19 +101,19 @@ public class Order {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
-    public String getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
