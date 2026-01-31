@@ -13,10 +13,6 @@
 
   <style>
     body { background-color: #f8f9fa; }
-    .status { padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; }
-    .PENDING { background: #fff3cd; color: #856404; }
-    .DONE { background: #d4edda; color: #155724; }
-    .CANCEL { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 
@@ -29,42 +25,99 @@
   </h3>
 
   <div class="card shadow-sm">
-    <table class="table table-hover align-middle mb-0 text-center">
+    <table class="table table-hover align-middle mb-0 text-center table-bordered">
       <thead class="table-light">
       <tr>
         <th>Mã đơn</th>
+        <th>Sản phẩm</th>
+        <th>Số lượng</th>
         <th>Ngày đặt</th>
         <th>Tổng tiền</th>
         <th>Thanh toán</th>
         <th>Trạng thái</th>
-        <th></th>
+        <th>Hành động</th>
       </tr>
       </thead>
 
       <tbody>
       <c:forEach items="${orders}" var="o">
         <tr>
-          <td>#${o.orderId}</td>
-          <td>
-            <fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy"/>
+          <td>${o.orderId}</td>
+
+          <td class="text-start">
+            <c:forEach items="${o.orderDetails}" var="d">
+              • ${d.productDetail.product.productName}<br/>
+            </c:forEach>
           </td>
-          <td class="fw-semibold text-danger">
+
+          <td>
+            <c:set var="totalQty" value="0"/>
+            <c:forEach items="${o.orderDetails}" var="d">
+              <c:set var="totalQty" value="${totalQty + d.quantity}"/>
+            </c:forEach>
+            ${totalQty}
+          </td>
+
+          <td>${o.orderDate}</td>
+
+          <td class="fw-semibold">
             <fmt:formatNumber value="${o.totalAmount}" type="currency"/>
           </td>
+
           <td>${o.paymentMethod}</td>
+
           <td>
-            <span class="status ${o.orderStatus}">
-                ${o.orderStatus}
-            </span>
+            <c:choose>
+              <c:when test="${o.orderStatus == 'PENDING'}">
+                <span class="badge bg-warning text-dark">
+                  Đang xử lý
+                </span>
+              </c:when>
+
+              <c:when test="${o.orderStatus == 'DONE'}">
+                <span class="badge bg-success">
+                  Đã giao
+                </span>
+              </c:when>
+
+              <c:when test="${o.orderStatus == 'CANCEL'}">
+                <span class="badge bg-danger">
+                  Đã hủy
+                </span>
+              </c:when>
+            </c:choose>
           </td>
+
           <td>
-            <a href="order-detail?id=${o.orderId}"
-               class="btn btn-sm btn-outline-primary">
-              <i class="fa-solid fa-eye"></i> Xem
-            </a>
+            <c:if test="${o.orderStatus == 'DONE'}">
+              <a href="${pageContext.request.contextPath}/order/rebuy?id=${o.orderId}"
+                 class="btn btn-sm btn-success">
+                <i class="fa-solid fa-rotate-right me-1"></i>Mua lại
+              </a>
+            </c:if>
+
+            <c:if test="${o.orderStatus == 'PENDING'}">
+              <a href="${pageContext.request.contextPath}/order/cancel?id=${o.orderId}"
+                 class="btn btn-sm btn-danger"
+                 onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">
+                <i class="fa-solid fa-xmark me-1"></i>Hủy đơn hàng
+              </a>
+            </c:if>
+
+            <c:if test="${o.orderStatus == 'CANCEL'}">
+              <span class="text-muted fst-italic">Không khả dụng</span>
+            </c:if>
           </td>
         </tr>
       </c:forEach>
+
+      <c:if test="${empty orders}">
+        <tr>
+          <td colspan="8" class="text-muted py-4">
+            Bạn chưa có đơn hàng nào
+          </td>
+        </tr>
+      </c:if>
       </tbody>
     </table>
   </div>

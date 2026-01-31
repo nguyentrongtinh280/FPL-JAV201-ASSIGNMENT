@@ -87,10 +87,17 @@ public class OrderDAOImpl implements OrderDAO{
     public List<Order> findByUserId(String userId) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT o FROM Order o WHERE o.user.userId = :uid";
-            TypedQuery<Order> query = em.createQuery(jpql, Order.class);
-            query.setParameter("uid", userId);
-            return query.getResultList();
+            String jpql = """
+            SELECT DISTINCT o FROM Order o
+            LEFT JOIN FETCH o.orderDetails od
+            LEFT JOIN FETCH od.productDetail pd
+            LEFT JOIN FETCH pd.product
+            WHERE o.user.userId = :uid
+            ORDER BY o.orderDate DESC
+        """;
+            return em.createQuery(jpql, Order.class)
+                    .setParameter("uid", userId)
+                    .getResultList();
         } finally {
             em.close();
         }
