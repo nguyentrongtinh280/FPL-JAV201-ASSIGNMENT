@@ -135,7 +135,7 @@
             <i class="fa fa-pen"></i> Sửa
           </button>
 
-          <button formaction="${url}/delete" onclick="return confirm('Xóa sản phẩm?')"
+          <button formaction="${url}/delete" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm?')"
                   class="btn btn-danger me-2">
             <i class="fa fa-trash"></i> Xóa
           </button>
