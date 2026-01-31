@@ -9,8 +9,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.beanutils.BeanUtils;
+import service.UserService;
+import service.UserServiceImpl;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet({
         "/admin/user",
@@ -23,17 +27,18 @@ import java.io.IOException;
 })
 public class UserControler extends HttpServlet {
 
-    private UserDAO userDAO = new UserDAOImpl();
+    //private UserDAO userDAO = new UserDAOImpl();
+
+    private final UserService userService = new UserServiceImpl();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
-        req.setAttribute("users", userDAO.getAllUsers());
+        req.setAttribute("users", userService.findAll());
         if (path.contains("/edit")) {
             String id = req.getParameter("id");
             if (id != null) {
-                User user = userDAO.findUserById(id);
-                req.setAttribute("user", user);
+                req.setAttribute("user", userService.findById(id));
                 req.setAttribute("isEdit", true);
             }
         }
@@ -44,9 +49,9 @@ public class UserControler extends HttpServlet {
         if (path.endsWith("/search")) {
             String keyword = req.getParameter("keyword");
             if (keyword != null && !keyword.trim().isEmpty()) {
-                req.setAttribute("users", userDAO.findByUsernameOrPhone(keyword.trim()));
+                req.setAttribute("users", userService.search(keyword.trim()));
             } else {
-                req.setAttribute("users", userDAO.getAllUsers());
+                req.setAttribute("users", userService.findAll());
             }
 
             req.getRequestDispatcher("/view/User.jsp").forward(req, resp);
@@ -66,64 +71,31 @@ public class UserControler extends HttpServlet {
             e.printStackTrace();
         }
 
+        String confirmPassword = req.getParameter("confirmPassword");
+        Map<String, String> errors = new HashMap<>();
         String path = req.getServletPath();
+
         if (path.endsWith("/create")) {
-            boolean hasError = false;
-            if (userDAO.existsByUsername(user.getUsername())) {
-                req.setAttribute("errorUsername", "Tên đăng nhập đã tồn tại");
-                hasError = true;
-            }
-            if (userDAO.existsByEmail(user.getEmail())) {
-                req.setAttribute("errorEmail", "Email đã tồn tại!");
-                hasError = true;
-            }
-            if (user.getPhone() != null && userDAO.existsByPhone(user.getPhone())) {
-                req.setAttribute("errorPhone", "Số điện thoại đã tồn tại!");
-                hasError = true;
-            }
-            if (!req.getParameter("password")
-                    .equals(req.getParameter("confirmPassword"))) {
-                req.setAttribute("errorPassword", "Mật khẩu không khớp!");
-                hasError = true;
-            }
-            if (hasError) {
-                req.setAttribute("user", user);
-                req.setAttribute("users", userDAO.getAllUsers());
-                req.setAttribute("isEdit", false);
-                req.getRequestDispatcher("/view/User.jsp").forward(req, resp);
-                return;
-            }
-            userDAO.createUser(user);
+            errors = userService.create(user, confirmPassword);
+
         } else if (path.endsWith("/update")) {
-            User oldUser = userDAO.findUserById(user.getUserId());
-            boolean hasError = false;
-            if (!user.getEmail().equals(oldUser.getEmail())
-                    && userDAO.existsByEmail(user.getEmail())) {
-                req.setAttribute("errorEmail", "Email đã tồn tại!");
-                hasError = true;
-            }
-            if (user.getPhone() != null
-                    && !user.getPhone().equals(oldUser.getPhone())
-                    && userDAO.existsByPhone(user.getPhone())) {
-                req.setAttribute("errorPhone", "Số điện thoại đã tồn tại!");
-                hasError = true;
-            }
-            if (!req.getParameter("password")
-                    .equals(req.getParameter("confirmPassword"))) {
-                req.setAttribute("errorPassword", "Mật khẩu không khớp!");
-                hasError = true;
-            }
-            if (hasError) {
-                req.setAttribute("user", user);
-                req.setAttribute("users", userDAO.getAllUsers());
-                req.setAttribute("isEdit", true);
-                req.getRequestDispatcher("/view/User.jsp").forward(req, resp);
-                return;
-            }
-            userDAO.updateUser(user);
+            errors = userService.update(user, confirmPassword);
+
         } else if (path.endsWith("/delete")) {
-            userDAO.deleteUser(user.getUserId());
+            userService.delete(user.getUserId());
+            resp.sendRedirect(req.getContextPath() + "/admin/user");
+            return;
         }
+
+        if (!errors.isEmpty()) {
+            errors.forEach(req::setAttribute);
+            req.setAttribute("user", user);
+            req.setAttribute("users", userService.findAll());
+            req.setAttribute("isEdit", path.endsWith("/update"));
+            req.getRequestDispatcher("/view/User.jsp").forward(req, resp);
+            return;
+        }
+
         resp.sendRedirect(req.getContextPath() + "/admin/user");
     }
 }
