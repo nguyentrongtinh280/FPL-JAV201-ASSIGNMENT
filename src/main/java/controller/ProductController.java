@@ -14,6 +14,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import service.CategoryService;
+import service.CategoryServiceImpl;
+import service.ProductService;
+import service.ProductServiceImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +39,9 @@ import java.util.UUID;
 @MultipartConfig
 public class ProductController extends HttpServlet {
 
-    ProductDAO productDAO = new ProductDAOImpl();
-    CategoryDAO categoryDAO = new CategoryDAOImpl();
+    private final ProductService productService = new ProductServiceImpl();
+    private final CategoryService categoryService = new CategoryServiceImpl();
+    private static final String IMAGE_FOLDER = "images";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -45,20 +50,20 @@ public class ProductController extends HttpServlet {
         String uri = req.getRequestURI();
 
         loadCommonData(req);
-        List<Product> products = productDAO.findAll();
+        List<Product> products = productService.findAll();
 
         if (uri.contains("/search")) {
             String keyword = req.getParameter("keyword");
             if (keyword != null && !keyword.isBlank()) {
-                products = productDAO.search(keyword);
+                products = productService.search(keyword);
             }
         }
 
         if (uri.contains("/edit")) {
             String id = req.getParameter("id");
-            Product p = productDAO.findById(id);
-            req.setAttribute("product", p);
-            req.setAttribute("detail", p.getProductDetails().get(0));
+            Product product = productService.findById(id);
+            req.setAttribute("product", product);
+            req.setAttribute("detail", product.getProductDetails().get(0));
             req.setAttribute("isEdit", true);
         }
 
@@ -66,12 +71,25 @@ public class ProductController extends HttpServlet {
         req.getRequestDispatcher("/view/Productt.jsp").forward(req, resp);
     }
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         String uri = req.getRequestURI();
+
+        Map<String, String> errors = validate(req);
+        if (!errors.isEmpty()) {
+            errors.forEach(req::setAttribute);
+            Product product = buildProductFromRequest(req);
+            ProductDetail productDetail = buildDetailFromRequest(req);
+
+            req.setAttribute("product", product);
+            req.setAttribute("detail", productDetail);
+
+            loadCommonData(req);
+            req.getRequestDispatcher("/view/Productt.jsp").forward(req, resp);
+            return;
+        }
 
         if (uri.contains("/create")) {
             create(req, resp);
@@ -82,19 +100,11 @@ public class ProductController extends HttpServlet {
         } else if (uri.contains("/reset")) {
             resp.sendRedirect(req.getContextPath() + "/admin/product");
         }
+
     }
 
     private void create(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
-
-        Map<String, String> errors = validate(req);
-
-        if (!errors.isEmpty()) {
-            errors.forEach(req::setAttribute);
-            loadCommonData(req);
-            req.getRequestDispatcher("/view/Productt.jsp").forward(req, resp);
-            return;
-        }
 
         Category category = new Category();
         category.setCategoryId(req.getParameter("categoryId"));
@@ -107,68 +117,100 @@ public class ProductController extends HttpServlet {
         ProductDetail detail = new ProductDetail();
         fillDetail(req, detail);
 
-        detail.setProduct(product);
-        product.setProductDetails(List.of(detail));
-
-        productDAO.create(product);
+        productService.create(product, detail);
         resp.sendRedirect(req.getContextPath() + "/admin/product");
     }
 
     private void update(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
-        Product product = productDAO.findById(req.getParameter("productId"));
-
+        Product product = productService.findById(req.getParameter("productId"));
         product.setProductName(req.getParameter("productName"));
         product.setDescription(req.getParameter("description"));
 
         ProductDetail detail = product.getProductDetails().get(0);
         fillDetail(req, detail);
 
-        productDAO.update(product);
+        productService.update(product, detail);
         resp.sendRedirect(req.getContextPath() + "/admin/product");
     }
 
     private void delete(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        productDAO.delete(req.getParameter("productId"));
+        productService.delete(req.getParameter("productId"));
         resp.sendRedirect(req.getContextPath() + "/admin/product");
     }
 
     private Map<String, String> validate(HttpServletRequest req) {
         Map<String, String> errors = new HashMap<>();
 
-        if (req.getParameter("productName").isBlank())
-            errors.put("errorProductName", "Tên sản phẩm không được trống");
+        if (req.getParameter("productName").isBlank()) {
+            errors.put("errorProductName", "Vui lòng nhập tên sản phẩm");
+        }
 
-        if (req.getParameter("categoryId").isBlank())
+        if (req.getParameter("categoryId").isBlank()) {
             errors.put("errorCategory", "Vui lòng chọn danh mục");
+        }
 
-        if (req.getParameter("size").isBlank())
+        if (req.getParameter("size").isBlank()) {
             errors.put("errorSize", "Vui lòng chọn size");
+        }
 
-        if (req.getParameter("color").isBlank())
+        if (req.getParameter("color").isBlank()) {
             errors.put("errorColor", "Vui lòng chọn màu");
+        }
 
-        if (req.getParameter("price").isBlank())
+        try {
+            double price = Double.parseDouble(req.getParameter("price"));
+            if (price <= 0) {
+                errors.put("errorPrice", "Giá phải lớn hơn 0");
+            }
+        } catch (NumberFormatException e) {
             errors.put("errorPrice", "Giá không hợp lệ");
+        }
 
-        if (req.getParameter("quantity").isBlank())
+        try {
+            double quantity = Double.parseDouble(req.getParameter("quantity"));
+            if (quantity < 0) {
+                errors.put("errorQuantity", "Số lượng phải lớn hơn 0");
+            }
+        } catch (NumberFormatException e) {
             errors.put("errorQuantity", "Số lượng không hợp lệ");
+        }
 
         return errors;
     }
 
-    private ProductDetail buildDetail(HttpServletRequest req, Product product)
-            throws IOException, ServletException {
+    private Product buildProductFromRequest(HttpServletRequest req) {
+        Product p = new Product();
+        p.setProductId(req.getParameter("productId"));
+        p.setProductName(req.getParameter("productName"));
+        p.setDescription(req.getParameter("description"));
 
+        Category c = new Category();
+        c.setCategoryId(req.getParameter("categoryId"));
+        p.setCategory(c);
+
+        return p;
+    }
+
+    private ProductDetail buildDetailFromRequest(HttpServletRequest req) {
         ProductDetail d = new ProductDetail();
-        d.setProduct(product);
-        fillDetail(req, d);
+        d.setSize(req.getParameter("size"));
+        d.setColor(req.getParameter("color"));
+        d.setStatus(req.getParameter("status"));
+
+        try {
+            d.setPrice(Double.parseDouble(req.getParameter("price")));
+        } catch (Exception e) {}
+
+        try {
+            d.setQuantity(Integer.parseInt(req.getParameter("quantity")));
+        } catch (Exception e) {}
+
         return d;
     }
 
-    private static final String IMAGE_FOLDER = "images";
 
     private void fillDetail(HttpServletRequest req, ProductDetail d)
             throws IOException, ServletException {
@@ -193,12 +235,14 @@ public class ProductController extends HttpServlet {
             }
 
             file.write(realPath + File.separator + fileName);
-
             d.setImage(fileName);
         }
     }
 
+
+
     private void loadCommonData(HttpServletRequest req) {
-        req.setAttribute("categories", categoryDAO.findAll());
+        req.setAttribute("categories", categoryService.findAll());
     }
+
 }
