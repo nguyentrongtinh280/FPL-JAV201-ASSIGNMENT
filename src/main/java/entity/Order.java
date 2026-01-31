@@ -33,18 +33,23 @@ public class Order {
     @Column(name = "OrderStatus", length = 30)
     private String orderStatus;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
+
+    @PrePersist
+    public void prePersist() {
+        orderDate = LocalDateTime.now();
+    }
 
     public Order() {
     }
 
-    public Order(Double totalAmount, String orderId, User user, LocalDateTime orderDate,
-                 String paymentMethod, String paymentStatus, String orderStatus, List<OrderDetail> orderDetails) {
+    public Order(Double totalAmount, User user, String paymentMethod, String paymentStatus,
+                 String orderStatus, List<OrderDetail> orderDetails) {
+
         this.totalAmount = totalAmount;
-        this.orderId = orderId;
         this.user = user;
-        this.orderDate = orderDate;
         this.paymentMethod = paymentMethod;
         this.paymentStatus = paymentStatus;
         this.orderStatus = orderStatus;

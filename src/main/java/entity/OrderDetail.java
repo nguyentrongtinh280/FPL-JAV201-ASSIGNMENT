@@ -9,7 +9,7 @@ public class OrderDetail {
     @EmbeddedId
     private OrderDetailId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("orderId")
     @JoinColumn(name = "OrderId", nullable = false)
     private Order order;
@@ -87,5 +87,11 @@ public class OrderDetail {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void calculateTotal() {
+        this.total = this.price * this.quantity;
     }
 }

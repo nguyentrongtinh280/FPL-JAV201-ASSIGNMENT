@@ -1,6 +1,7 @@
 package dao;
 
-import entity.Order;
+import entity.OrderDetail;
+import entity.OrderDetailId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
@@ -8,15 +9,15 @@ import utils.XJPA;
 
 import java.util.List;
 
-public class OrderDAOImpl implements OrderDAO{
+public class OrderDetailDAOImpl implements OrderDetailDAO{
 
     @Override
-    public void create(Order order) {
+    public void create(OrderDetail orderDetail) {
         EntityManager em = XJPA.getEntityManager();
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            em.persist(order);
+            em.persist(orderDetail);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -27,30 +28,30 @@ public class OrderDAOImpl implements OrderDAO{
     }
 
     @Override
-    public void update(Order order) {
+    public void update(OrderDetail orderDetail) {
         EntityManager em = XJPA.getEntityManager();
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            em.merge(order);
+            em.merge(orderDetail);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
             throw e;
-        }  finally {
+        } finally {
             em.close();
         }
     }
 
     @Override
-    public void delete(String orderId) {
+    public void delete(OrderDetailId id) {
         EntityManager em = XJPA.getEntityManager();
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            Order order = em.find(Order.class, orderId);
-            if (order != null) {
-                em.remove(order);
+            OrderDetail orderDetail = em.find(OrderDetail.class, id);
+            if (orderDetail != null) {
+                em.remove(orderDetail);
             }
             transaction.commit();
         } catch (Exception e) {
@@ -62,47 +63,22 @@ public class OrderDAOImpl implements OrderDAO{
     }
 
     @Override
-    public Order findById(String orderId) {
+    public OrderDetail findById(OrderDetailId id) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            return em.find(Order.class, orderId);
+            return em.find(OrderDetail.class, id);
         } finally {
             em.close();
         }
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<OrderDetail> findByOrderId(String orderId) {
         EntityManager em = XJPA.getEntityManager();
         try {
-            String jpql = "SELECT o FROM Order o ORDER BY o.orderDate DESC";
-            TypedQuery<Order> query = em.createQuery(jpql, Order.class);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    @Override
-    public List<Order> findByUserId(String userId) {
-        EntityManager em = XJPA.getEntityManager();
-        try {
-            String jpql = "SELECT o FROM Order o WHERE o.user.userId = :uid";
-            TypedQuery<Order> query = em.createQuery(jpql, Order.class);
-            query.setParameter("uid", userId);
-            return query.getResultList();
-        } finally {
-            em.close();
-        }
-    }
-
-    @Override
-    public List<Order> findByOrderStatus(String orderStatus) {
-        EntityManager em = XJPA.getEntityManager();
-        try {
-            String jpql = "SELECT o FROM Order o WHERE o.orderStatus = :status";
-            TypedQuery<Order> query = em.createQuery(jpql, Order.class);
-            query.setParameter("status", orderStatus);
+            String jpql = "SELECT od FROM OrderDetail od WHERE od.order.orderId = :orderId";
+            TypedQuery<OrderDetail> query = em.createQuery(jpql, OrderDetail.class);
+            query.setParameter("orderId", orderId);
             return query.getResultList();
         } finally {
             em.close();
