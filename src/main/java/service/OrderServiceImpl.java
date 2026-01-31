@@ -28,12 +28,11 @@ public class OrderServiceImpl implements OrderService {
         double total = 0;
         for (OrderDetail orderDetail : details) {
             total += orderDetail.getPrice() * orderDetail.getQuantity();
+            orderDetail.setOrder(order);
         }
         order.setTotalAmount(total);
 
-        for (OrderDetail orderDetail : details) {
-            orderDetail.setOrder(order);
-        }
+        order.setOrderDetails(details);
 
         orderDAO.create(order);
     }

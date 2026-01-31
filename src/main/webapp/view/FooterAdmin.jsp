@@ -38,10 +38,10 @@
       <div class="col-md-4 mb-3">
         <h5 class="footer-title">Liên kết nhanh</h5>
         <ul class="list-unstyled">
-          <li><a href="#">Trang chủ</a></li>
-          <li><a href="#">Sản phẩm</a></li>
-          <li><a href="#">Giới thiệu</a></li>
-          <li><a href="#">Liên hệ</a></li>
+          <li><a href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
+          <li><a href="${pageContext.request.contextPath}/home">Sản phẩm</a></li>
+          <li><a href="${pageContext.request.contextPath}/home">Giới thiệu</a></li>
+          <li><a href="${pageContext.request.contextPath}/home">Liên hệ</a></li>
         </ul>
       </div>
 
@@ -57,9 +57,16 @@
           <i class="fa fa-envelope me-2"></i>support@shopthoitrang.com
         </p>
         <div class="mt-2">
-          <a href="https://www.facebook.com/" class="me-3"><i class="fab fa-facebook fa-lg"></i></a>
-          <a href="https://www.instagram.com/" class="me-3"><i class="fab fa-instagram fa-lg"></i></a>
-          <a href="https://www.tiktok.com/"><i class="fab fa-tiktok fa-lg"></i></a>
+          <a href="https://www.facebook.com/" class="me-3" target="_blank">
+            <i class="fab fa-facebook fa-lg"></i>
+          </a>
+
+          <a href="https://www.instagram.com/" class="me-3" target="_blank">
+            <i class="fab fa-instagram fa-lg"></i>
+          </a>
+          <a href="https://www.tiktok.com/" class="me-3" target="_blank">
+            <i class="fab fa-tiktok fa-lg"></i>
+          </a>
         </div>
       </div>
     </div>

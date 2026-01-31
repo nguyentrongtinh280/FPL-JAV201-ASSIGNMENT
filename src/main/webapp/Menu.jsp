@@ -120,6 +120,15 @@
 
             <div class="col-md-3 text-md-end text-center user-cart">
 
+                <c:if test="${not empty sessionScope.currentUser}">
+                    <a href="${pageContext.request.contextPath}/my-order"
+                       class="cart-wrapper text-decoration-none">
+                        <div class="cart-icon">
+                            <i class="fa-solid fa-box"></i>
+                        </div>
+                    </a>
+                </c:if>
+
                 <a href="${pageContext.request.contextPath}/cart"
                    class="cart-wrapper text-decoration-none">
                     <div class="cart-icon">
