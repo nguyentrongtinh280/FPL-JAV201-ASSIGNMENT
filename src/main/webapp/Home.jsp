@@ -11,9 +11,10 @@
   <style>
     h3 { font-weight: 600; letter-spacing: 1px; }
     .product-card {
+      height: 380px;
       background: #fff;
       border-radius: 12px;
-      padding: 15px;
+      padding: 20px;
       text-align: center;
       transition: 0.3s;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -25,7 +26,7 @@
       border-color: #0d6efd;
     }
     .product-img {
-      height: 150px;
+      height: 220px;
       border-radius: 10px;
       margin-bottom: 10px;
       background: #f0f0f0;

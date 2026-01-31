@@ -23,7 +23,8 @@
 
 <main class="container my-4">
   <c:url var="url" value="/admin/product"/>
-  <div class="card shadow mb-4">
+  <br/>
+  <div class="card shadow-sm mb-4">
     <div class="card-body">
       <h4 class="page-title text-center mb-3">Thông tin sản phẩm</h4>
 
@@ -148,12 +149,12 @@
   </div>
 
   <form action="${url}/search" class="d-flex mb-3">
-    <input name="keyword" class="form-control w-25 me-2" placeholder="Tên sản phẩm, giá, danh mục">
+    <input name="keyword" class="form-control w-25 me-2 shadow-sm" placeholder="Nhập tên sản phẩm, giá, danh mục">
     <button class="btn btn-primary"><i class="fa fa-search"></i> Tìm kiếm
     </button>
   </form>
 
-  <div class="card shadow">
+  <div class="card shadow-sm">
     <div class="card-body">
       <h5 class="page-title mb-3">Danh sách sản phẩm</h5>
 
@@ -166,7 +167,7 @@
           <th>Size</th>
           <th>Màu</th>
           <th>Giá</th>
-          <th>SL</th>
+          <th>Số lượng</th>
           <th>Ảnh</th>
           <th>Trạng thái</th>
           <th>Hành động</th>
