@@ -6,6 +6,7 @@ import dao.OrderDetailDAO;
 import dao.OrderDetailDAOImpl;
 import entity.Order;
 import entity.OrderDetail;
+import entity.OrderDetailId;
 import enumType.OrderStatus;
 import enumType.PaymentStatus;
 
@@ -15,6 +16,27 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderDAO orderDAO = new OrderDAOImpl();
     private final OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
+
+//    @Override
+//    public void createOrder(Order order, List<OrderDetail> details) {
+//        if (order.getOrderStatus() == null) {
+//            order.setOrderStatus(OrderStatus.PENDING);
+//        }
+//        if (order.getPaymentStatus() == null) {
+//            order.setPaymentStatus(PaymentStatus.UNPAID);
+//        }
+//
+//        double total = 0;
+//        for (OrderDetail orderDetail : details) {
+//            total += orderDetail.getPrice() * orderDetail.getQuantity();
+//            orderDetail.setOrder(order);
+//        }
+//        order.setTotalAmount(total);
+//
+//        order.setOrderDetails(details);
+//
+//        orderDAO.create(order);
+//    }
 
     @Override
     public void createOrder(Order order, List<OrderDetail> details) {
@@ -26,14 +48,13 @@ public class OrderServiceImpl implements OrderService {
         }
 
         double total = 0;
-        for (OrderDetail orderDetail : details) {
-            total += orderDetail.getPrice() * orderDetail.getQuantity();
-            orderDetail.setOrder(order);
+        for (OrderDetail od : details) {
+            od.setOrder(order);
+            total += od.getPrice() * od.getQuantity();
         }
+
         order.setTotalAmount(total);
-
         order.setOrderDetails(details);
-
         orderDAO.create(order);
     }
 

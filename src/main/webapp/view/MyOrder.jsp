@@ -58,13 +58,22 @@
             ${totalQty}
           </td>
 
-          <td>${o.orderDate}</td>
+          <td>${o.orderDateFormatted}</td>
 
-          <td class="fw-semibold">
-            <fmt:formatNumber value="${o.totalAmount}" type="currency"/>
+          <td>
+            <fmt:formatNumber value="${o.totalAmount}" type="number" pattern="#,##0"/> VNĐ
           </td>
 
-          <td>${o.paymentMethod}</td>
+          <td>
+            <c:choose>
+              <c:when test="${o.paymentMethod == 'COD'}">
+                Tiền mặt
+              </c:when>
+              <c:when test="${o.paymentMethod == 'BANKING'}">
+                Chuyển khoản
+              </c:when>
+            </c:choose>
+          </td>
 
           <td>
             <c:choose>

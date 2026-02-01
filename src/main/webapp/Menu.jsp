@@ -94,10 +94,12 @@
     <div class="header-custom">
         <div class="row align-items-center">
             <div class="col-md-3 d-flex align-items-center justify-content-md-start justify-content-center">
-                <img src="${pageContext.request.contextPath}/images/TTSHop.png"
-                     alt="Logo"
-                     style="width:55px;height:55px">
-                <span class="brand-name ms-2">TokTok Shop</span>
+                <a href="${pageContext.request.contextPath}/home" class="text-decoration-none">
+                    <img src="${pageContext.request.contextPath}/images/TTSHop.png"
+                         alt="Logo"
+                         style="width:55px;height:55px">
+                    <span class="brand-name ms-2">TokTok Shop</span>
+                </a>
             </div>
 
             <div class="col-md-6 search-box">

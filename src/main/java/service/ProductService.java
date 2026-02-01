@@ -16,4 +16,6 @@ public interface ProductService {
     void update(Product product, ProductDetail productDetail);
     void delete(String productId);
 
+    ProductDetail findProductDetailById(String productDetailId);
+
 }
