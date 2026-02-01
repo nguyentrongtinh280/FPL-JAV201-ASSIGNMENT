@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <html>
 <head>
   <title>Trang chủ</title>
@@ -76,7 +77,8 @@
             <div class="product-name">${p.productName}</div>
 
             <div class="product-price">
-                ${d.price} đ
+
+              <fmt:formatNumber value="${d.price}" type="number" pattern="#,##0"/> VNĐ
             </div>
 
             <a href="#" class="btn-cart">

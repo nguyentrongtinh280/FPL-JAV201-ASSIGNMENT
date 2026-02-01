@@ -60,8 +60,8 @@
 
           <td>${o.orderDate}</td>
 
-          <td class="fw-semibold">
-            <fmt:formatNumber value="${o.totalAmount}" type="currency"/>
+          <td>
+            <fmt:formatNumber value="${o.totalAmount}" type="number" pattern="#,##0"/> VNĐ
           </td>
 
           <td>${o.paymentMethod}</td>

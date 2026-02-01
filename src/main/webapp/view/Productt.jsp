@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -185,7 +186,9 @@
               <td>${p.category.categoryName}</td>
               <td>${d.size}</td>
               <td>${d.color}</td>
-              <td>${d.price}</td>
+              <td>
+                <fmt:formatNumber value="${d.price}" type="number" pattern="#,##0"/> VNĐ
+              </td>
               <td>${d.quantity}</td>
               <td>
                 <img src="${pageContext.request.contextPath}/images/${d.image}" class="product-img">
