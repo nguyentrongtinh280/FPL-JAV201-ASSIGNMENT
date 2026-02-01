@@ -3,8 +3,10 @@ package entity;
 import enumType.OrderStatus;
 import enumType.PaymentStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -20,6 +22,7 @@ public class Order {
     @JoinColumn(name = "UserId", nullable = false)
     private User user;
 
+    @CreationTimestamp
     @Column(name = "OrderDate")
     private LocalDateTime orderDate;
 
@@ -41,10 +44,15 @@ public class Order {
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
 
-    @PrePersist
-    public void prePersist() {
-        orderDate = LocalDateTime.now();
-    }
+//    @PrePersist
+//    public void prePersist() {
+//        orderDate = LocalDateTime.now();
+//    }
+@Transient
+public String getOrderDateFormatted() {
+    return orderDate == null ? "" :
+            orderDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+}
 
     public Order() {
     }

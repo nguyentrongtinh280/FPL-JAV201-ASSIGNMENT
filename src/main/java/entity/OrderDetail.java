@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 public class OrderDetail {
 
     @EmbeddedId
-    private OrderDetailId id;
+    private OrderDetailId id = new OrderDetailId();
+    //private OrderDetailId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("orderId")

@@ -32,7 +32,7 @@
 <div class="container my-5">
   <h3 class="text-center fw-bold mb-4 text-primary">Chi tiết đơn hàng</h3>
 
-  <form action="order-create" method="post">
+  <form action="${pageContext.request.contextPath}/order-create" method="post">
     <div class="card shadow-sm mb-4">
       <div class="card-body p-0">
         <table class="table table-bordered align-middle text-center mb-0">
@@ -43,16 +43,18 @@
             <th>Số lượng</th>
             <th>Giá</th>
             <th>Thành tiền</th>
-            <th></th>
           </tr>
           </thead>
           <tbody>
-          <c:forEach items="${cartItems}" var="item">
+          <c:forEach items="${orderItems}" var="item">
             <tr>
               <td>
-                <img src="${item.product.image}" class="product-img">
+                <img src="${pageContext.request.contextPath}/images/${item.productDetail.image}"
+                     class="product-img">
               </td>
-              <td>${item.product.name}</td>
+
+              <td>${item.productDetail.product.productName}</td>
+
               <td>
                 <input type="number"
                        name="quantities"
@@ -60,22 +62,20 @@
                        min="1"
                        class="form-control form-control-sm text-center qty-input">
               </td>
+
               <td>
-                <fmt:formatNumber value="${item.price}" type="currency"/>
+                <fmt:formatNumber value="${item.price}" type="number"/> VNĐ
               </td>
+
               <td>
-                <fmt:formatNumber value="${item.total}" type="currency"/>
-              </td>
-              <td>
-                <a href="cart-remove?id=${item.product.id}" class="btn-delete">
-                  <i class="fa-solid fa-trash"></i>
-                </a>
+                <fmt:formatNumber value="${item.total}" type="number"/> VNĐ
               </td>
             </tr>
 
-            <input type="hidden" name="productIds" value="${item.product.id}">
+            <input type="hidden"
+                   name="productDetailIds"
+                   value="${item.productDetail.productDetailId}">
           </c:forEach>
-
           </tbody>
         </table>
       </div>
@@ -86,16 +86,16 @@
         <div class="card shadow-sm">
           <div class="card-body">
             <p>Tạm tính: <span class="float-end">
-              <fmt:formatNumber value="${subtotal}" type="currency"/>
+              <fmt:formatNumber value="${subtotal}" type="number"/> VNĐ
             </span></p>
             <p>Phí vận chuyển: <span class="float-end">
-              <fmt:formatNumber value="${shippingFee}" type="currency"/>
+              <fmt:formatNumber value="${shippingFee}" type="number"/> VNĐ
             </span></p>
             <hr>
             <p class="total">
               Tổng:
               <span class="float-end">
-                <fmt:formatNumber value="${totalAmount}" type="currency"/>
+                <fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ
               </span>
             </p>
             <button class="btn btn-primary mt-3">
@@ -112,13 +112,13 @@
 
             <div class="form-check mb-2">
               <input class="form-check-input" type="radio"
-                     name="paymentMethod" value="COD" checked>
-              <label class="form-check-label">COD</label>
+                     name="paymentMethod" value="COD" required>
+              <label class="form-check-label">Tiền mặt</label>
             </div>
 
             <div class="form-check">
               <input class="form-check-input" type="radio"
-                     name="paymentMethod" value="BANKING">
+                     name="paymentMethod" value="BANKING" required>
               <label class="form-check-label">Chuyển khoản</label>
             </div>
           </div>

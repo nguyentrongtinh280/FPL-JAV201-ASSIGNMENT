@@ -46,4 +46,9 @@ public class ProductServiceImpl implements ProductService{
     public void delete(String productId) {
         productDAO.delete(productId);
     }
+
+    @Override
+    public ProductDetail findProductDetailById(String productDetailId) {
+        return productDetailDAO.findById((productDetailId));
+    }
 }

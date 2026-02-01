@@ -81,6 +81,11 @@
               <fmt:formatNumber value="${d.price}" type="number" pattern="#,##0"/> VNĐ
             </div>
 
+            <a href="${pageContext.request.contextPath}/order-detail?pdid=${d.productDetailId}"
+               class="btn-cart">
+              <i class="fa-solid fa-bag-shopping me-2"></i> Mua hàng
+            </a>
+
             <a href="#" class="btn-cart">
               <i class="fa fa-cart-plus"></i> Giỏ Hàng
             </a>

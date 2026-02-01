@@ -11,10 +11,8 @@ import service.OrderServiceImpl;
 
 import java.io.IOException;
 
-@WebServlet({
-  "/order/cancel"
-})
-public class OrderController extends HttpServlet {
+@WebServlet({"/order/cancel"})
+public class CancelOrderController extends HttpServlet {
 
     private final OrderService orderService = new OrderServiceImpl();
 
