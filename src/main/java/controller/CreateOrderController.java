@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Lưu ý: này chỉ đặt hàng của 1 sản phẩm thôi nha kkk
-//Lưu ý: này chỉ đặt hàng của 1 sản phẩm thôi nha kkk
 @WebServlet("/order-create")
 public class CreateOrderController extends HttpServlet {
 
