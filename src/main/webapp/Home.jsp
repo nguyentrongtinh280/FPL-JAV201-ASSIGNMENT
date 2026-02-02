@@ -123,13 +123,12 @@
               <a href="${pageContext.request.contextPath}/Cart.jsp"
                  class="btn-action">
                 <i class="fa fa-cart-plus"></i>
-                giỏ hàng
+                Giỏ hàng
               </a>
 
-              <a href="${pageContext.request.contextPath}/OrderDetail.jsp"
+              <a href="${pageContext.request.contextPath}/order-detail?pdid=${d.productDetailId}"
                  class="btn-action">
-                <i class="fa fa-bolt"></i>
-                đặt hàng
+                <i class="fa-solid fa-bag-shopping me-2"></i> Mua hàng
               </a>
 
             </div>
