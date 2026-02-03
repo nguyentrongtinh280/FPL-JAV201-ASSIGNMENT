@@ -17,10 +17,12 @@
     }
     .login-card {
       width: 500px;
-      height: 390px;
+      min-height: 390px;
+      height: auto;
       border-radius: 15px;
       overflow: hidden;
     }
+
     .login-right {
       padding: 50px;
     }
@@ -56,6 +58,13 @@
   <div class="row g-0">
     <div class="col-md-12 login-right">
       <h3 class="text-center fw-bold mb-4 text-primary">Đăng nhập</h3>
+      <c:if test="${not empty successMessage}">
+        <div class="alert alert-success text-center">
+            ${successMessage}
+        </div>
+        <c:remove var="successMessage" scope="session"/>
+      </c:if>
+
       <form action="login" method="post" id="loginForm" novalidate>
         <div class="mb-3 position-relative">
           <i class="fa fa-user input-icon"></i>

@@ -57,7 +57,8 @@
   <div class="row g-0">
     <div class="col-md-12 login-right">
       <h3 class="text-center fw-bold mb-4 text-primary">Đăng ký tài khoản</h3>
-      <form action="register" method="post" id="registerForm" novalidate>
+      <form action="${pageContext.request.contextPath}/register"
+            method="post" id="registerForm" novalidate>
 
         <div class="mb-3 position-relative">
           <i class="fa-solid fa-file-signature input-icon"></i>
@@ -87,6 +88,18 @@
                 ${errorUsername}
               </c:when>
             </c:choose>
+          </div>
+        </div>
+        <div class="mb-3 position-relative">
+          <i class="fa fa-envelope input-icon"></i>
+          <input type="email"
+                 class="form-control ${not empty errorEmail ? 'is-invalid' : ''}"
+                 name="email"
+                 value="${user.email}"
+                 placeholder="Email"
+                 required>
+          <div class="invalid-feedback">
+            ${errorEmail}
           </div>
         </div>
 

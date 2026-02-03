@@ -83,8 +83,11 @@ public class RegisterController extends HttpServlet {
         }
 
         userDAO.createUser(user);
-
-        resp.sendRedirect(req.getContextPath() + "/home");
+        req.getSession().setAttribute(
+                "successMessage",
+                "Đăng ký tài khoản thành công! Vui lòng đăng nhập."
+        );
+        resp.sendRedirect(req.getContextPath() + "/login");
 
     }
 }
