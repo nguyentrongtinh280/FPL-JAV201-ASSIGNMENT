@@ -109,6 +109,10 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean existsByUsername(String username) {
+        if (username == null || username.isBlank()) {
+            return false;
+        }
+
         EntityManager em = XJPA.getEntityManager();
         try {
             String jpql = "SELECT COUNT(u) FROM User u WHERE u.username = :un";
@@ -121,8 +125,13 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+
     @Override
     public boolean existsByEmail(String email) {
+        if (email == null || email.isBlank()) {
+            return false;
+        }
+
         EntityManager em = XJPA.getEntityManager();
         try {
             String jpql = "SELECT COUNT(u) FROM User u WHERE u.email = :em";
@@ -137,6 +146,10 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public boolean existsByPhone(String phone) {
+        if (phone == null || phone.isBlank()) {
+            return false;
+        }
+
         EntityManager em = XJPA.getEntityManager();
         try {
             String jpql = "SELECT COUNT(u) FROM User u WHERE u.phone = :ph";
@@ -148,6 +161,7 @@ public class UserDAOImpl implements UserDAO {
             em.close();
         }
     }
+
 
     @Override
     public User findUserByEmailOrUsername(String emailOrUsername) {

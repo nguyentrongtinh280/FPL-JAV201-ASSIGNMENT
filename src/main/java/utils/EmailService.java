@@ -7,13 +7,8 @@ import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class EmailService {
-
-    // Gmail gửi
     private static final String FROM_EMAIL = "quocanhbuinhat@gmail.com";
-
-    // App Password Gmail (16 ký tự)
     private static final String APP_PASSWORD = "mkjjiljafkdbvmqg";
-
     public static void sendOTP(String toEmail, String otp) {
 
         Properties props = new Properties();
@@ -54,10 +49,10 @@ public class EmailService {
             // Gửi mail
             Transport.send(message);
 
-            System.out.println("✅ Đã gửi OTP tới email: " + toEmail);
+            System.out.println("Đã gửi OTP tới email: " + toEmail);
 
         } catch (MessagingException e) {
-            System.out.println("❌ Lỗi gửi email OTP");
+            System.out.println("Lỗi gửi email OTP");
             e.printStackTrace();
         }
     }
