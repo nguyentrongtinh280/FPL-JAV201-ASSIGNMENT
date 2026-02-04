@@ -119,8 +119,7 @@
             </a>
 
             <div class="d-flex justify-content-center gap-2 mt-2">
-
-              <a href="${pageContext.request.contextPath}/Cart.jsp"
+              <a href="${pageContext.request.contextPath}/cart/add?productDetailId=${d.productDetailId}"
                  class="btn-action">
                 <i class="fa fa-cart-plus"></i>
                 giỏ hàng

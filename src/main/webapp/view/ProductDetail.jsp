@@ -133,7 +133,7 @@
             </div>
 
             <div class="product-price">
-                ${detail.price} đ
+                ${detail.price}
             </div>
 
             <div class="mb-3">
@@ -172,7 +172,8 @@
 
             <div class="d-flex gap-3 align-items-center">
                 <a class="btn-buy" onclick="orderNow()">Đặt hàng</a>
-                <a class="btn-cart-circle" onclick="addToCart()">
+                <a class="btn-cart-circle"
+                   href="${pageContext.request.contextPath}/cart/add?productDetailId=${detail.productDetailId}">
                     <i class="fa fa-cart-shopping"></i>
                 </a>
             </div>
@@ -184,29 +185,12 @@
 <jsp:include page="/view/FooterAdmin.jsp"/>
 
 <script>
-    function increaseQty() {
-        let qty = document.getElementById("qty");
-        qty.value = parseInt(qty.value) + 1;
-    }
-
     function decreaseQty() {
         let qty = document.getElementById("qty");
         let value = parseInt(qty.value);
         if (value > 1) {
             qty.value = value - 1;
         }
-    }
-
-    function addToCart() {
-        let qty = document.getElementById("qty").value;
-        window.location.href =
-            "${pageContext.request.contextPath}/Cart.jsp?pid=${detail.product.productId}&qty=" + qty;
-    }
-
-    function orderNow() {
-        let qty = document.getElementById("qty").value;
-        window.location.href =
-            "${pageContext.request.contextPath}/OrderDetail?pid=${detail.product.productId}&qty=" + qty;
     }
 </script>
 
