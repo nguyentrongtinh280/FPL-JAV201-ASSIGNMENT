@@ -1,60 +1,64 @@
-package filter;
+    package filter;
 
-import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+    import jakarta.servlet.*;
+    import jakarta.servlet.annotation.WebFilter;
+    import jakarta.servlet.http.HttpServletRequest;
+    import jakarta.servlet.http.HttpServletResponse;
+    import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
-@WebFilter(
-        urlPatterns = "/*",
-        dispatcherTypes = DispatcherType.REQUEST
-)
-public class LoginFilter implements Filter {
+    import java.io.IOException;
+    @WebFilter(
+            urlPatterns = "/*",
+            dispatcherTypes = {
+                DispatcherType.REQUEST,
+                DispatcherType.FORWARD
+            }
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
+    )
+    public class LoginFilter implements Filter {
 
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
+        @Override
+        public void doFilter(ServletRequest request, ServletResponse response,
+                             FilterChain chain) throws IOException, ServletException {
 
-        String uri = req.getRequestURI();
+            HttpServletRequest req = (HttpServletRequest) request;
+            HttpServletResponse resp = (HttpServletResponse) response;
 
-        if (uri.contains("/images/")
-                || uri.contains("/css/")
-                || uri.contains("/js/")
-                || uri.contains("/fonts/")) {
+            String uri = req.getRequestURI();
 
-            chain.doFilter(request, response);
-            return;
-        }
+            if (uri.contains("/images/")
+                    || uri.contains("/css/")
+                    || uri.contains("/js/")
+                    || uri.contains("/fonts/")) {
 
-        boolean isPublic =
-                uri.equals(req.getContextPath() + "/")
-                || uri.endsWith("/home")
-                        || uri.endsWith("/login")
-                        || uri.endsWith("/register")
-                        || uri.endsWith("/forgot-password")
-                        || uri.endsWith("/reset-password")
-                        || uri.contains("ResetPassword.jsp")
-                        || uri.contains("Login.jsp")
-                        || uri.contains("Register.jsp")
-                        || uri.contains("OTP.jsp");
+                chain.doFilter(request, response);
+                return;
+            }
 
-        if (isPublic) {
-            chain.doFilter(request, response);
-            return;
-        }
+            boolean isPublic =
+                    uri.equals(req.getContextPath() + "/")
+                    || uri.endsWith("/home")
+                            || uri.endsWith("/login")
+                            || uri.endsWith("/register")
+                            || uri.endsWith("/forgot-password")
+                            || uri.endsWith("/reset-password")
+                            || uri.contains("ResetPassword.jsp")
+                            || uri.contains("Login.jsp")
+                            || uri.contains("Register.jsp")
+                            || uri.contains("OTP.jsp");
 
-        HttpSession session = req.getSession(false);
-        Object user = (session != null) ? session.getAttribute("currentUser") : null;
+            if (isPublic) {
+                chain.doFilter(request, response);
+                return;
+            }
 
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
-        } else {
-            chain.doFilter(request, response);
+            HttpSession session = req.getSession(false);
+            Object user = (session != null) ? session.getAttribute("currentUser") : null;
+
+            if (user == null) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+            } else {
+                chain.doFilter(request, response);
+            }
         }
     }
-}

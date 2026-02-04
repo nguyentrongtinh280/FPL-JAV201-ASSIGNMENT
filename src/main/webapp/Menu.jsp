@@ -128,6 +128,12 @@
                     </a>
                 </c:if>
 
+                <!-- PROFILE -->
+                <a href="${pageContext.request.contextPath}/profile"
+                   class="btn btn-warning rounded-circle d-flex align-items-center justify-content-center"
+                   style="width:42px;height:42px;">
+                    <i class="fa-solid fa-user"></i>
+                </a>
                 <a href="${pageContext.request.contextPath}/cart"
                    class="cart-wrapper text-decoration-none">
                     <div class="cart-icon">
