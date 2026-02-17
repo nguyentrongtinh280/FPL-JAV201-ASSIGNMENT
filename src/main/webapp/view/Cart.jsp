@@ -91,6 +91,7 @@
     }
   </style>
 </head>
+<jsp:include page="Menu2.jsp"/>
 
 <body>
 
@@ -142,7 +143,9 @@
           </td>
 
           <td class="price-text">
-            $<span class="price">${item.price}</span>
+            <span class="price">
+              <fmt:formatNumber value="${item.price}" type="number" pattern="#,##0"/> VNĐ
+             </span>
           </td>
 
           <td>
@@ -162,7 +165,9 @@
           </td>
 
           <td class="price-text" style="color:green;">
-            $<span class="total"></span>
+            <span class="total">
+              <fmt:formatNumber value="${item.price}" type="number" pattern="#,##0"/>
+            </span> VNĐ
           </td>
 
           <td>
@@ -194,7 +199,7 @@
         <h5 class="me-4 mb-0">
           Tổng thanh toán:
           <strong style="color:green;font-size:1.5rem;">
-            $${grandTotal}
+            <fmt:formatNumber value="${grandTotal}" type="number" pattern="#,##0"/> VNĐ
           </strong>
         </h5>
 
@@ -207,6 +212,7 @@
 
   </div>
 </div>
+<jsp:include page="FooterAdmin.jsp"/>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

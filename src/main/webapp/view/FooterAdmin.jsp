@@ -41,7 +41,7 @@
           <li><a href="${pageContext.request.contextPath}/home">Trang chủ</a></li>
           <li><a href="${pageContext.request.contextPath}/home">Sản phẩm</a></li>
           <li><a href="${pageContext.request.contextPath}/home">Giới thiệu</a></li>
-          <li><a href="${pageContext.request.contextPath}/home">Liên hệ</a></li>
+          <li><a href="${pageContext.request.contextPath}/contact">Liên hệ</a></li>
         </ul>
       </div>
 
@@ -54,8 +54,12 @@
           <i class="fa fa-phone me-2"></i>0123 456 789
         </p>
         <p class="mb-1">
-          <i class="fa fa-envelope me-2"></i>support@shopthoitrang.com
+          <i class="fa fa-envelope me-2"></i>
+          <a href="${pageContext.request.contextPath}/contact">
+            support@shopthoitrang.com
+          </a>
         </p>
+
         <div class="mt-2">
           <a href="https://www.facebook.com/" class="me-3" target="_blank">
             <i class="fab fa-facebook fa-lg"></i>
