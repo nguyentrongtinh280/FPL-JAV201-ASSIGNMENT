@@ -42,7 +42,7 @@
                             || uri.endsWith("/register")
                             || uri.endsWith("/forgot-password")
                             || uri.endsWith("/reset-password")
-                            || uri.contains("ResetPassword.jsp")
+                            || uri.contains("ResetPass.jsp")
                             || uri.contains("Login.jsp")
                             || uri.contains("Register.jsp")
                             || uri.contains("OTP.jsp");
