@@ -42,10 +42,10 @@
                             || uri.endsWith("/register")
                             || uri.endsWith("/forgot-password")
                             || uri.endsWith("/reset-password")
-                            || uri.contains("ResetPass.jsp")
+                            || uri.contains("Reset Pass.jsp")
                             || uri.contains("Login.jsp")
-                            || uri.contains("Register.jsp")
-                            || uri.contains("OTP.jsp");
+                            || uri.contains("Register.jsp");
+
 
             if (isPublic) {
                 chain.doFilter(request, response);
